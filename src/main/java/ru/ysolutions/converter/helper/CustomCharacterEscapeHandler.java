@@ -1,5 +1,5 @@
-package ru.ysolutions.converter.converter;
-
+package ru.ysolutions.converter.helper;
+/*
 import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
 
 import java.io.IOException;
@@ -46,3 +46,4 @@ public class CustomCharacterEscapeHandler implements CharacterEscapeHandler {
             out.write(ch, start, limit - start);
     }
 }
+*/

@@ -1,6 +1,6 @@
 package ru.ysolutions.converter;
 
-import ru.ysolutions.converter.converter.Converter;
+import jakarta.xml.bind.JAXBException;
 import ru.ysolutions.converter.exception.CheckInputParamsException;
 
 import java.nio.file.Path;
@@ -15,8 +15,9 @@ public class ConverterMain {
             final List<String> params = Arrays.asList(args.clone());
             checkInputParams(params);
             new Converter(Path.of(params.get(0)), Path.of(params.get(1))).convert();
-        } catch (RuntimeException e) {
+        } catch (RuntimeException | JAXBException e) {
             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

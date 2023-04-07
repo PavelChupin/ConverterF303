@@ -1,12 +1,11 @@
-package ru.ysolutions.converter.converter;
+package ru.ysolutions.converter.helper;
 
-import com.sun.xml.bind.marshaller.CharacterEscapeHandler;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import ru.ysolutions.converter.models.xml.Ф0409303;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
@@ -16,7 +15,7 @@ public class ParserHelper {
         Unmarshaller unmarshaller = context.createUnmarshaller();
 
         //Устанавливаем  кодировку
-        unmarshaller.setProperty(Marshaller.JAXB_ENCODING, Charset.forName("windows-1251"));
+        //unmarshaller.setProperty(Marshaller.JAXB_ENCODING, Charset.forName("windows-1251"));
 
         //Убираем standalone из тега заголовка
         //Включаем режим вывода только XML фрагмента без заголовка
@@ -51,7 +50,7 @@ public class ParserHelper {
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 
         //Включаем экранирование символов
-        marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CustomCharacterEscapeHandler());
+        //marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CustomCharacterEscapeHandler());
 
         // маршаллинг объекта в файл
         marshaller.marshal(f303, xmlFileOut.toFile());
