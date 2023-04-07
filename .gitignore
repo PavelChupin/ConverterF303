@@ -35,3 +35,5 @@ build/
 ### OTHER ###
 *.log
 *.gz
+0409303.xml
+**/META-INF/JAXB/
