@@ -36,4 +36,4 @@ build/
 *.log
 *.gz
 0409303.xml
-**/META-INF/JAXB/
+!**/src/main/java/META-INF/JAXB/*

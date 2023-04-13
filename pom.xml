@@ -21,10 +21,11 @@
         <!--<jaxb-api.version>2.3.1</jaxb-api.version>-->
         <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <!--<activation.version>1.1.1</activation.version>-->
-
+        <log4j-core.version>2.20.0</log4j-core.version>
         <jakarta-xml-bind-api.version>4.0.0</jakarta-xml-bind-api.version>
         <poi-ooxml.version>5.2.3</poi-ooxml.version>
         <poi.version>5.2.3</poi.version>
+        <lombok.version>1.18.26</lombok.version>
         <start-class>ru.ysolutions.converter.ConverterMain</start-class>
     </properties>
 
@@ -35,6 +36,11 @@
             <version>${jaxb-api.version}</version>
         </dependency>-->
         <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>${jakarta-xml-bind-api.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
             <version>${jaxb-runtime.version}</version>
@@ -44,22 +50,31 @@
             <artifactId>activation</artifactId>
             <version>${activation.version}</version>
         </dependency>-->
+
+        <!-- Excel start -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
             <version>${poi.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>${poi-ooxml.version}</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
         <dependency>
-            <groupId>jakarta.xml.bind</groupId>
-            <artifactId>jakarta.xml.bind-api</artifactId>
-            <version>${jakarta-xml-bind-api.version}</version>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>${log4j-core.version}</version>
+        </dependency>
+        <!-- Excel end -->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
 
 
@@ -68,6 +83,29 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>3.0.5</version>
+                <configuration>
+                    <mainClass>ru.ysolutions.converter.ConverterMain</mainClass>
+                    <layout>JAR</layout>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>jaxb2-maven-plugin</artifactId>
                 <version>3.1.0</version>
@@ -80,7 +118,6 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- The package of your generated sources -->
                     <packageName>ru.ysolutions.converter.models.xml</packageName>
                     <encoding>UTF-8</encoding>
                     <outputDirectory>src/main/java</outputDirectory>
@@ -90,73 +127,7 @@
                     <generateEpisode>false</generateEpisode>
                     <clearOutputDir>false</clearOutputDir>
                 </configuration>
-            </plugin>
-
-           <!--<plugin>
-                <groupId>org.jvnet.jaxb2.maven2</groupId>
-                <artifactId>maven-jaxb2-plugin</artifactId>
-                <version>0.15.2</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <id>generate-crm</id>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <generatePackage>ru.ysolutions.converter.models.xml</generatePackage>
-                            <encoding>UTF-8</encoding>
-
-                            <args>
-                                <arg>-npa</arg>
-                                <arg>-XautoNameResolution</arg>
-                            </args>
-                            <schemaDirectory>src/main/resources/xsd</schemaDirectory>
-                            <schemaIncludes>
-                                <includeSchema>F303Schema.xsd</includeSchema>
-                            </schemaIncludes>
-
-                            <bindingDirectory>src/main/resources/xsd</bindingDirectory>
-                            <bindingIncludes>
-                                <include>*.xjb</include>
-                            </bindingIncludes>
-
-                            <strict>false</strict>
-                            <verbose>true</verbose>
-                            <removeOldOutput>false</removeOldOutput>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>-->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>ru.ysolutions.converter.ConverterMain</mainClass>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
-                            <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                    <appendAssemblyId>false</appendAssemblyId>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>make-assembly</id> <!-- this is used for inheritance merges -->
-                        <phase>package</phase> <!-- bind to the packaging phase -->
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-
         </plugins>
     </build>
-
 </project>

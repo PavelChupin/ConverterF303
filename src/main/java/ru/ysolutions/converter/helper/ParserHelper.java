@@ -4,8 +4,11 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
+import org.apache.poi.ss.usermodel.Workbook;
 import ru.ysolutions.converter.models.xml.Ф0409303;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Path;
 
@@ -56,4 +59,9 @@ public class ParserHelper {
         marshaller.marshal(f303, xmlFileOut.toFile());
     }
 
+    public static void writeIntoExcelXlsx(Path fileTo, Workbook book) throws IOException {
+        // Записываем всё в файл
+        book.write(new FileOutputStream(fileTo.toFile()));
+        book.close();
+    }
 }
