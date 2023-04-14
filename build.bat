@@ -1,1 +1,2 @@
-start mvn -DskipTests=true clean install spring-boot:repackage
+start mvn -DskipTests=true clean install
+
