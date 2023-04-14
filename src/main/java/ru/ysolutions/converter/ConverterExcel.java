@@ -1,11 +1,10 @@
 package ru.ysolutions.converter;
 
 import org.apache.poi.ss.usermodel.*;
-import ru.ysolutions.converter.models.xls.F303;
-import ru.ysolutions.converter.models.xls.F303ClientGVZ;
-import ru.ysolutions.converter.models.xls.F303Contract;
-import ru.ysolutions.converter.models.xls.F303Encumbrance;
+import ru.ysolutions.converter.models.xls.*;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -159,7 +158,7 @@ public class ConverterExcel {
             saveValueToCellString(row, 20, f303Contract.okcmOrganizationBuyClaimRights_p2_21(), this.stringStyle);
 
             // 22
-            saveValueToCellString(row, 21, f303Contract.countRestrict_p2_22().toString(), this.stringStyle);
+            saveValueToBigInteger(row, 21, f303Contract.countRestrict_p2_22(), this.stringStyle);
 
             // 23
             saveValueToCellString(row, 22, f303Contract.informationBancrot_p2_23(), this.stringStyle);
@@ -182,6 +181,64 @@ public class ConverterExcel {
 
             // 34
             saveValueToCellString(row, 33, f303Contract.contractUID_p2_34(), this.stringStyle);
+
+            // 35
+            saveValueToCellString(row, 34, f303Contract.conditions().p3_35(), this.stringStyle);
+
+            // 36
+            saveValueToCellString(row, 35, f303Contract.conditions().p3_36(), this.stringStyle);
+
+            // 37
+            saveValueToCellBigDecimal(row, 36, f303Contract.conditions().p3_37(), this.stringStyle);
+
+            // 38
+            saveValueToCellBigDecimal(row, 37, f303Contract.conditions().p3_38(), this.stringStyle);
+
+            // 39
+            saveValueToCellString(row, 38, f303Contract.conditions().p3_39(), this.stringStyle);
+
+            // 40
+            saveValueToCellString(row, 39, f303Contract.conditions().p3_40(), this.stringStyle);
+
+            // 41
+            saveValueToCellDate(row, 40, f303Contract.conditions().p3_41(), this.dateStyle);
+
+            // 42
+            saveValueToCellDate(row, 41, f303Contract.conditions().p3_42(), this.dateStyle);
+
+            // 43
+            saveValueToCellString(row, 42, f303Contract.conditions().p3_43(), this.stringStyle);
+
+            // 44
+            saveValueToCellBigDecimal(row, 43, f303Contract.conditions().p3_44(), this.stringStyle);
+
+            // 45
+            saveValueToCellBigDecimal(row, 44, f303Contract.conditions().p3_45(), this.stringStyle);
+
+            // 46
+            saveValueToCellBigDecimal(row, 45, f303Contract.conditions().p3_46(), this.stringStyle);
+
+            // 47
+            saveValueToBigInteger(row, 46, f303Contract.conditions().p3_47(), this.stringStyle);
+
+            // 48
+            saveValueToCellString(row, 47, f303Contract.conditions().p3_48(), this.stringStyle);
+
+            // 49/50/51
+            //private List<F303ConditionsCode> conditionsCodes;
+
+
+            // 52
+            saveValueToCellString(row, 51, f303Contract.conditions().p3_52(), this.stringStyle);
+
+            // 53
+            saveValueToCellString(row, 52, f303Contract.conditions().p3_53(), this.stringStyle);
+
+            // 54
+            saveValueToCellBigDecimal(row, 53, f303Contract.conditions().p3_54(), this.stringStyle);
+
+            // 55
+            saveValueToCellBigDecimal(row, 54, f303Contract.conditions().p3_55(), this.stringStyle);
         }
 
         // Меняем размер столбцов
@@ -190,6 +247,89 @@ public class ConverterExcel {
 //        }
         return this.workBook;
     }
+
+    // 26/27/28/29/30/31/32
+    private int saveEncumbrance(int startContractRow, Sheet sheet, List<F303Encumbrance> encumbrances) {
+        int number = startContractRow - 1;
+        for (F303Encumbrance f303Encumbrance : encumbrances) {
+            number++;
+            Row rowNumber = sheet.getRow(number);
+            if (rowNumber == null) {
+                rowNumber = sheet.createRow(number);
+            }
+            // 26
+            saveValueToCellString(rowNumber, 25, f303Encumbrance.p2_26(), this.stringStyle);
+            // 27
+            saveValueToCellString(rowNumber, 26, f303Encumbrance.p2_27(), this.stringStyle);
+            // 28
+            saveValueToCellString(rowNumber, 27, f303Encumbrance.p2_28(), this.stringStyle);
+            // 29
+            saveValueToCellString(rowNumber, 28, f303Encumbrance.p2_29(), this.stringStyle);
+            // 30
+            saveValueToCellString(rowNumber, 29, f303Encumbrance.p2_30(), this.stringStyle);
+            // 31
+            saveValueToCellBigDecimal(rowNumber, 30, f303Encumbrance.p2_31(), this.stringStyle);
+            // 32
+            saveValueToCellDate(rowNumber, 31, f303Encumbrance.p2_32(), this.dateStyle);
+        }
+        return number;
+    }
+
+    // Поля 11 и 12
+    private int saveClientGVZ(int startContractRow, Sheet sheet, List<F303ClientGVZ> f303ClientGVZS) {
+        int number = startContractRow - 1;
+        for (F303ClientGVZ f303ClientGVZ : f303ClientGVZS) {
+            number++;
+            Row rowNumber = sheet.getRow(number);
+            if (rowNumber == null) {
+                rowNumber = sheet.createRow(number);
+            }
+            // 11
+            saveValueToCellString(rowNumber, 10, f303ClientGVZ.groupNumber_p1_11(), this.stringStyle);
+            // 12
+            saveValueToCellString(rowNumber, 11, f303ClientGVZ.groupName_p1_12(), this.stringStyle);
+        }
+        return number;
+    }
+
+    private void saveValueToCellBigDecimal(Row rowNumber, int i, BigDecimal value, CellStyle cellStyle) {
+        if (value == null) {return;}
+        final Cell cell = rowNumber.createCell(i, CellType.STRING);
+        cell.setCellValue(value.toString());
+        if (cellStyle != null) {
+            cell.setCellStyle(cellStyle);
+        }
+    }
+
+    private void saveValueToBigInteger(Row rowNumber, int i, BigInteger value, CellStyle cellStyle) {
+        if (value == null) {return;}
+        final Cell cell = rowNumber.createCell(i, CellType.STRING);
+        cell.setCellValue(value.toString());
+        if (cellStyle != null) {
+            cell.setCellStyle(cellStyle);
+        }
+    }
+
+    private void saveValueToCellString(Row rowNumber, int i, String value, CellStyle cellStyle) {
+        final Cell cell = rowNumber.createCell(i, CellType.STRING);
+        cell.setCellValue(value);
+        if (cellStyle != null) {
+            cell.setCellStyle(cellStyle);
+        }
+    }
+
+    private void saveValueToCellDate(Row row, int i, LocalDate valueDate, CellStyle cellStyle) {
+        final Cell cell = row.createCell(i);
+        cell.setCellStyle(cellStyle);
+        if (valueDate != null) {
+            cell.setCellValue(
+                    Date.from(valueDate.atStartOfDay()
+                            .atZone(ZoneId.systemDefault())
+                            .toInstant())
+            );
+        }
+    }
+
 
     private int saveHeaderReport(Sheet sheet, LocalDate reportDate) {
         // Первая строка
@@ -219,70 +359,5 @@ public class ConverterExcel {
         ExcelHeader.columnPart.keySet().forEach(key -> saveValueToCellString(finalRow2, key, ExcelHeader.columnPart.get(key), this.headerColumnPatr));
 
         return row.getRowNum();
-    }
-
-    // 26/27/28/29/30/31/32
-    private int saveEncumbrance(int startContractRow, Sheet sheet, List<F303Encumbrance> encumbrances) {
-        int number = startContractRow - 1;
-        for (F303Encumbrance f303Encumbrance : encumbrances) {
-            number++;
-            Row rowNumber = sheet.getRow(number);
-            if (rowNumber == null) {
-                rowNumber = sheet.createRow(number);
-            }
-            // 26
-            saveValueToCellString(rowNumber, 25, f303Encumbrance.p2_26(), this.stringStyle);
-            // 27
-            saveValueToCellString(rowNumber, 26, f303Encumbrance.p2_27(), this.stringStyle);
-            // 28
-            saveValueToCellString(rowNumber, 27, f303Encumbrance.p2_28(), this.stringStyle);
-            // 29
-            saveValueToCellString(rowNumber, 28, f303Encumbrance.p2_29(), this.stringStyle);
-            // 30
-            saveValueToCellString(rowNumber, 29, f303Encumbrance.p2_30(), this.stringStyle);
-            // 31
-            saveValueToCellString(rowNumber, 30, f303Encumbrance.p2_31().toString(), this.stringStyle);
-            // 32
-            saveValueToCellDate(rowNumber, 31, f303Encumbrance.p2_32(), this.dateStyle);
-
-        }
-        return number;
-    }
-
-    // Поля 11 и 12
-    private int saveClientGVZ(int startContractRow, Sheet sheet, List<F303ClientGVZ> f303ClientGVZS) {
-        int number = startContractRow - 1;
-        for (F303ClientGVZ f303ClientGVZ : f303ClientGVZS) {
-            number++;
-            Row rowNumber = sheet.getRow(number);
-            if (rowNumber == null) {
-                rowNumber = sheet.createRow(number);
-            }
-            // 11
-            saveValueToCellString(rowNumber, 10, f303ClientGVZ.groupNumber_p1_11(), this.stringStyle);
-            // 12
-            saveValueToCellString(rowNumber, 11, f303ClientGVZ.groupName_p1_12(), this.stringStyle);
-        }
-        return number;
-    }
-
-    private void saveValueToCellString(Row rowNumber, int i, String value, CellStyle cellStyle) {
-        final Cell cell = rowNumber.createCell(i, CellType.STRING);
-        cell.setCellValue(value);
-        if (cellStyle != null) {
-            cell.setCellStyle(cellStyle);
-        }
-    }
-
-    private void saveValueToCellDate(Row row, int i, LocalDate valueDate, CellStyle cellStyle) {
-        final Cell cell = row.createCell(i);
-        cell.setCellStyle(cellStyle);
-        if (valueDate != null) {
-            cell.setCellValue(
-                    Date.from(valueDate.atStartOfDay()
-                            .atZone(ZoneId.systemDefault())
-                            .toInstant())
-            );
-        }
     }
 }

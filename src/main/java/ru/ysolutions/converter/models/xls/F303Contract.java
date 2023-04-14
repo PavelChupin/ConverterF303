@@ -31,4 +31,5 @@ public class F303Contract {
     private List<F303Encumbrance> encumbrances;
     private String kindRestrict_p2_33;
     private String contractUID_p2_34;
+    private F303Conditions conditions;
 }

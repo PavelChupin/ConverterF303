@@ -1,9 +1,6 @@
 package ru.ysolutions.converter.models.xls;
 
-import ru.ysolutions.converter.models.xml.Ф0409303;
-import ru.ysolutions.converter.models.xml.Ф0409303Данные303ДоговорР1;
-import ru.ysolutions.converter.models.xml.Ф0409303Данные303ДоговорР1ГВЗ;
-import ru.ysolutions.converter.models.xml.Ф0409303Данные303ДоговорР2Обрем;
+import ru.ysolutions.converter.models.xml.*;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -31,6 +28,7 @@ public class FactoryF303 {
                         .encumbrances(getEncumbrances(c.getР2Обрем()))
                         .kindRestrict_p2_33(c.getР2().getР221())
                         .contractUID_p2_34(c.getР2().getР222())
+                        .conditions(getConditionsByParam(c.getР3(), c.getУсл()))
                 )
                 .collect(Collectors.toList());
 
@@ -40,6 +38,48 @@ public class FactoryF303 {
         return new F303()
                 .reportDate(reportDate)
                 .contracts(f303Contracts);
+    }
+
+    private static F303Conditions getConditionsByParam(Ф0409303Данные303ДоговорР3 conditions, List<Ф0409303Данные303ДоговорУсл> conditionCode) {
+        final List<F303ConditionsCode> conditionsCodes = conditionCode
+                .stream()
+                .map(v -> new F303ConditionsCode()
+                        .p3_49(v.getР315())
+                        .conditionsCodeConds(getConditionsCodeConds(v.getДогПоУсл()))
+                )
+                .collect(Collectors.toList());
+
+        return new F303Conditions()
+                .p3_35(conditions.getР31())
+                .p3_36(conditions.getР32())
+                .p3_37(conditions.getР33())
+                .p3_38(conditions.getР34())
+                .p3_39(conditions.getР35())
+                .p3_40(conditions.getР36())
+                .p3_41(conditions.getР37() != null ? LocalDate.of(conditions.getР37().getYear(), conditions.getР37().getMonth(), conditions.getР37().getDay()) : null)
+                .p3_42(conditions.getР38() != null ? LocalDate.of(conditions.getР38().getYear(), conditions.getР38().getMonth(), conditions.getР38().getDay()) : null)
+                .p3_43(conditions.getР39())
+                .p3_44(conditions.getР310())
+                .p3_45(conditions.getР311())
+                .p3_46(conditions.getР312())
+                .p3_47(conditions.getР313Н())
+                .p3_48(conditions.getР314())
+                .conditionsCodes(conditionsCodes)
+                .p3_52(conditions.getР317())
+                .p3_53(conditions.getР318())
+                .p3_54(conditions.getР319())
+                .p3_55(conditions.getР320());
+
+
+    }
+
+    private static List<F303ConditionsCodeCond> getConditionsCodeConds(List<Ф0409303Данные303ДоговорУслДогПоУсл> conditionsCodeConds) {
+        return conditionsCodeConds
+                .stream()
+                .map(v -> new F303ConditionsCodeCond()
+                        .p3_50(v.getР316())
+                        .p3_51(v.getР316Рг()))
+                .collect(Collectors.toList());
     }
 
     private static List<F303Encumbrance> getEncumbrances(List<Ф0409303Данные303ДоговорР2Обрем> encumbrance) {
