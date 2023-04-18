@@ -32,4 +32,6 @@ public class F303Contract {
     private String kindRestrict_p2_33;
     private String contractUID_p2_34;
     private F303Conditions conditions;
+    private List<F303Warranty> warranties;
+    private List<F303Tranche> tranches;
 }
