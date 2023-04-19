@@ -15,24 +15,42 @@ public class FactoryF303 {
                         // p1
                         .client_p1(getClientByContract(c.getР1(), c.getР1ГВЗ()))
                         // p2
-                        .contractId_p13(c.getР21())
-                        .contractNumber_p14(c.getР2().getР22())
-                        .contractDate_p15(getLocalDateByXMLGregorianCalendar(c.getР2().getР23()))
-                        .numberBuyClaimRights_p16(c.getР2().getР24())
-                        .dateBuyClaimRights_p17(getLocalDateByXMLGregorianCalendar(c.getР2().getР25()))
-                        .nameOrganizationBuyClaimRights_p18(c.getР2().getР26())
-                        .ogrnOrganizationBuyClaimRights_p19(c.getР2().getР27())
-                        .regNumberOrganizationBuyClaimRights_p20(c.getР2().getР28())
-                        .okcmOrganizationBuyClaimRights_p21(c.getР2().getР29())
-                        .countRestrict_p22(c.getР2().getР210())
-                        .informationBancrot_p23(c.getР2().getР211Н())
-                        .dateInformationBancrot_24(getLocalDateByXMLGregorianCalendar(c.getР2().getР212Н()))
-                        .dateLastRestrict_p25(getLocalDateByXMLGregorianCalendar(c.getР2().getР213Н()))
+                        .p13(c.getР21())
+                        .p14(c.getР2().getР22())
+                        .p15(getLocalDateByXMLGregorianCalendar(c.getР2().getР23()))
+                        .p16(c.getР2().getР24())
+                        .p17(getLocalDateByXMLGregorianCalendar(c.getР2().getР25()))
+                        .p18(c.getР2().getР26())
+                        .p19(c.getР2().getР27())
+                        .p20(c.getР2().getР28())
+                        .p21(c.getР2().getР29())
+                        .p22(c.getР2().getР210())
+                        .p23(c.getР2().getР211Н())
+                        .p24(getLocalDateByXMLGregorianCalendar(c.getР2().getР212Н()))
+                        .p25(getLocalDateByXMLGregorianCalendar(c.getР2().getР213Н()))
                         .encumbrances(getEncumbrances(c.getР2Обрем()))
-                        .kindRestrict_p33(c.getР2().getР221())
-                        .contractUID_p34(c.getР2().getР222())
+                        .p33(c.getР2().getР221())
+                        .p34(c.getР2().getР222())
                         // p3
-                        .conditions(getConditionsByParam(c.getР3(), c.getУсл()))
+                        .p35(c.getР3().getР31())
+                        .p36(c.getР3().getР32())
+                        .p37(c.getР3().getР33())
+                        .p38(c.getР3().getР34())
+                        .p39(c.getР3().getР35())
+                        .p40(c.getР3().getР36())
+                        .p41(getLocalDateByXMLGregorianCalendar(c.getР3().getР37()))
+                        .p42(getLocalDateByXMLGregorianCalendar(c.getР3().getР38()))
+                        .p43(c.getР3().getР39())
+                        .p44(c.getР3().getР310())
+                        .p45(c.getР3().getР311())
+                        .p46(c.getР3().getР312())
+                        .p47(c.getР3().getР313Н())
+                        .p48(c.getР3().getР314())
+                        .conditionsCodes(getConditionCodesByParam(c.getУсл()))
+                        .p52(c.getР3().getР317())
+                        .p53(c.getР3().getР318())
+                        .p54(c.getР3().getР319())
+                        .p55(c.getР3().getР320())
                         // p4
                         .warranties(getWarratiesByParam(c.getР4Обесп()))
                         // p5
@@ -73,7 +91,18 @@ public class FactoryF303 {
                         .p91(c.getР8() != null ? c.getР8().getР84() : null)
 
                         // p9
-
+                        .p92(c.getР9() != null ? c.getР9().getР91() : null)
+                        .p93(c.getР9() != null ? c.getР9().getР92() : null)
+                        .p94(c.getР9() != null ? c.getР9().getР93() : null)
+                        .p95(c.getР9() != null ? c.getР9().getР94() : null)
+                        .p96(c.getР9() != null ? c.getР9().getР95() : null)
+                        .p97(c.getР9() != null ? c.getР9().getР96() : null)
+                        .p98(c.getР9() != null ? c.getР9().getР97() : null)
+                        .p99(c.getР9() != null ? getLocalDateByXMLGregorianCalendar(c.getР9().getР98()) : null)
+                        .f303Repayments(getRepaymentsByParam(c.getПогшн()))
+                        .f303RepaymentSources(getRepaymentSourcesByParam(c.getИст()))
+                        .p104(c.getР9() != null ? c.getР9().getР913() : null)
+                        .p105(c.getР9() != null ? c.getР9().getР914() : null)
 
                         // p10
                         .p10(getF303p10(c.getР10()))
@@ -85,6 +114,51 @@ public class FactoryF303 {
         return new F303()
                 .reportDate(reportDate)
                 .contracts(f303Contracts);
+    }
+
+    private static List<F303RepaymentSource> getRepaymentSourcesByParam(List<Ф0409303Данные303ДоговорИст> repaymentSource) {
+        return repaymentSource
+                .stream()
+                .map(r -> new F303RepaymentSource()
+                        .p101(r.getР910())
+                        .f303RepaymentSourceContracts(getRepaymentSourceContractsByParam(r.getИстДог()))
+                        .f303RepaymentSourceProperties(getRepaymentSourcePropertiesByParam(r.getИстСум()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303RepaymentSourceProperties> getRepaymentSourcePropertiesByParam(List<Ф0409303Данные303ДоговорИстИстСум> repaymentSourceProperties) {
+        return repaymentSourceProperties
+                .stream()
+                .map(r -> new F303RepaymentSourceProperties()
+                        .p94(r.getР93())
+                        .p97(r.getР96())
+                        .p98(r.getР97())
+                        .p104(r.getР913())
+                        .p105(r.getР914())
+                )
+                .collect(Collectors.toList());
+
+    }
+
+    private static List<F303RepaymentSourceContract> getRepaymentSourceContractsByParam(List<Ф0409303Данные303ДоговорИстИстДог> repaymentSourceContract) {
+        return repaymentSourceContract
+                .stream()
+                .map(r -> new F303RepaymentSourceContract()
+                        .p102(r.getР911())
+                        .p103(r.getР912())
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303Repayment> getRepaymentsByParam(List<Ф0409303Данные303ДоговорПогшн> repayments) {
+        return repayments
+                .stream()
+                .map(r -> new F303Repayment()
+                        .p99(getLocalDateByXMLGregorianCalendar(r.getР98()))
+                        .p100(getLocalDateByXMLGregorianCalendar(r.getР99()))
+                )
+                .collect(Collectors.toList());
     }
 
     private static List<F303p10> getF303p10(List<Ф0409303Данные303ДоговорР10> p10) {
@@ -108,42 +182,153 @@ public class FactoryF303 {
         return tranches
                 .stream()
                 .map(t -> new F303Tranche()
-                                // p2
-                                // p3
-                                // p4
-
-                                // p5
-                                .p62(getLocalDateByXMLGregorianCalendar(t.getР5Т().getР51()))
-                                .p63(t.getР52())
-                                .p64(t.getР5Т() != null ? t.getР5Т().getР53() : null)
-                                .p65(t.getР5Т() != null ? t.getР5Т().getР54() : null)
-                                .p66(t.getР5Т() != null ? t.getР5Т().getР55() : null)
-                                .p67(t.getР5Т() != null ? t.getР5Т().getР56() : null)
-                                .p68(t.getР5Т() != null ? t.getР5Т().getР57() : null)
-                                .p69(t.getР5Т() != null ? t.getР5Т().getР58() : null)
-                                .p70(t.getР5Т() != null ? t.getР5Т().getР59() : null)
-                                // p6
-                                .p71(t.getР6Т() != null ? t.getР6Т().getР61() : null)
-                                .p72(t.getР6Т() != null ? t.getР6Т().getР62() : null)
-                                .p73(t.getР6Т() != null ? t.getР6Т().getР63() : null)
-                                .p74(t.getР6Т() != null ? t.getР6Т().getР64() : null)
-                                .p75(t.getР6Т() != null ? t.getР6Т().getР65() : null)
-                                .p76(t.getР6Т() != null ? t.getР6Т().getР66() : null)
-                                .p77(t.getР6Т() != null ? t.getР6Т().getР67() : null)
-                                .p78(t.getР6Т() != null ? t.getР6Т().getР68() : null)
-                                .p79(t.getР6Т() != null ? t.getР6Т().getР69() : null)
-                                .p80(t.getР6Т() != null ? t.getР6Т().getР610() : null)
-                                .p81(null)
-                                .p82(t.getР6Т() != null ? t.getР6Т().getР612() : null)
-                                .p83(t.getР6Т() != null ? t.getР6Т().getР613() : null)
-                                .p84(t.getР6Т() != null ? t.getР6Т().getР614() : null)
-                                // p7
-                                .p85(t.getР7Т() != null ? t.getР7Т().getР71() : null)
-                                .p86(t.getР7Т() != null ? t.getР7Т().getР72() : null)
-                                .p87(t.getР7Т() != null ? t.getР7Т().getР73Н() : null)
+                        // p2
+                        .p22(t.getР2Т() != null ? t.getР2Т().getР210() : null)
+                        .p25(t.getР2Т() != null ? getLocalDateByXMLGregorianCalendar(t.getР2Т().getР213Н()) : null)
+                        .p33(t.getР2Т() != null ? t.getР2Т().getР221() : null)
+                        // p3
+                        .p36(t.getР3Т() != null ? t.getР3Т().getР32() : null)
+                        .p37(t.getР3Т() != null ? t.getР3Т().getР33() : null)
+                        .p38(t.getР3Т() != null ? t.getР3Т().getР34() : null)
+                        .p39(t.getР3Т() != null ? t.getР3Т().getР35() : null)
+                        .p40(t.getР3Т() != null ? t.getР3Т().getР36() : null)
+                        .p41(t.getР3Т() != null ? getLocalDateByXMLGregorianCalendar(t.getР3Т().getР37()) : null)
+                        .p42(t.getР3Т() != null ? getLocalDateByXMLGregorianCalendar(t.getР3Т().getР38()) : null)
+                        .p43(t.getР3Т() != null ? t.getР3Т().getР39() : null)
+                        .p44(t.getР3Т() != null ? t.getР3Т().getР310() : null)
+                        .p45(t.getР3Т() != null ? t.getР3Т().getР311() : null)
+                        .p46(t.getР3Т() != null ? t.getР3Т().getР312() : null)
+                        .p47(t.getР3Т() != null ? t.getР3Т().getР313Н() : null)
+                        .p48(t.getР3Т() != null ? t.getР3Т().getР314() : null)
+                        // 49/50/51
+                        .conditionsCodes(getTranchegetConditionCodesByParam(t.getУслТ()))
+                        .p52(t.getР3Т() != null ? t.getР3Т().getР317() : null)
+                        .p53(t.getР3Т() != null ? t.getР3Т().getР318() : null)
+                        .p54(t.getР3Т() != null ? t.getР3Т().getР319() : null)
+                        .p55(t.getР3Т() != null ? t.getР3Т().getР320() : null)
+                        // p4
+                        .warranties(getTrancheWarrantiesByParam(t.getР4ОбеспТ()))
+                        // p5
+                        .p62(getLocalDateByXMLGregorianCalendar(t.getР5Т().getР51()))
+                        .p63(t.getР52())
+                        .p64(t.getР5Т() != null ? t.getР5Т().getР53() : null)
+                        .p65(t.getР5Т() != null ? t.getР5Т().getР54() : null)
+                        .p66(t.getР5Т() != null ? t.getР5Т().getР55() : null)
+                        .p67(t.getР5Т() != null ? t.getР5Т().getР56() : null)
+                        .p68(t.getР5Т() != null ? t.getР5Т().getР57() : null)
+                        .p69(t.getР5Т() != null ? t.getР5Т().getР58() : null)
+                        .p70(t.getР5Т() != null ? t.getР5Т().getР59() : null)
+                        // p6
+                        .p71(t.getР6Т() != null ? t.getР6Т().getР61() : null)
+                        .p72(t.getР6Т() != null ? t.getР6Т().getР62() : null)
+                        .p73(t.getР6Т() != null ? t.getР6Т().getР63() : null)
+                        .p74(t.getР6Т() != null ? t.getР6Т().getР64() : null)
+                        .p75(t.getР6Т() != null ? t.getР6Т().getР65() : null)
+                        .p76(t.getР6Т() != null ? t.getР6Т().getР66() : null)
+                        .p77(t.getР6Т() != null ? t.getР6Т().getР67() : null)
+                        .p78(t.getР6Т() != null ? t.getР6Т().getР68() : null)
+                        .p79(t.getР6Т() != null ? t.getР6Т().getР69() : null)
+                        .p80(t.getР6Т() != null ? t.getР6Т().getР610() : null)
+                        .p81(null)
+                        .p82(t.getР6Т() != null ? t.getР6Т().getР612() : null)
+                        .p83(t.getР6Т() != null ? t.getР6Т().getР613() : null)
+                        .p84(t.getР6Т() != null ? t.getР6Т().getР614() : null)
+                        // p7
+                        .p85(t.getР7Т() != null ? t.getР7Т().getР71() : null)
+                        .p86(t.getР7Т() != null ? t.getР7Т().getР72() : null)
+                        .p87(t.getР7Т() != null ? t.getР7Т().getР73Н() : null)
 
                         // p9
+                        .p92(t.getР9Т() != null ? t.getР9Т().getР91() : null)
+                        .p93(t.getР9Т() != null ? t.getР9Т().getР92() : null)
+                        .p94(t.getР9Т() != null ? t.getР9Т().getР93() : null)
+                        .p95(t.getР9Т() != null ? t.getР9Т().getР94() : null)
+                        .p96(t.getР9Т() != null ? t.getР9Т().getР95() : null)
+                        .p97(t.getР9Т() != null ? t.getР9Т().getР96() : null)
+                        .p98(t.getР9Т() != null ? t.getР9Т().getР97() : null)
+                        .p99(t.getР9Т() != null ? getLocalDateByXMLGregorianCalendar(t.getР9Т().getР98()) : null)
+                        .f303Repayments(getTrancheRepaymentsByParam(t.getПогшнТ()))
+                        .f303RepaymentSources(getTrancheRepaymentSourcesByParam(t.getИстТ()))
+                        .p104(t.getР9Т() != null ? t.getР9Т().getР913() : null)
+                        .p105(t.getР9Т() != null ? t.getР9Т().getР914() : null)
                 )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303RepaymentSource> getTrancheRepaymentSourcesByParam(List<Ф0409303Данные303ДоговорТраншИстТ> repaymentSource) {
+        return repaymentSource
+                .stream()
+                .map(r -> new F303RepaymentSource()
+                        .p101(r.getР910())
+                        .f303RepaymentSourceContracts(getTrancheRepaymentSourceContractsByParam(r.getИстДог()))
+                        .f303RepaymentSourceProperties(getTrancheRepaymentSourcePropertiesByParam(r.getИстСум()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303RepaymentSourceProperties> getTrancheRepaymentSourcePropertiesByParam(List<Ф0409303Данные303ДоговорТраншИстТИстСум> repaymentSourceProperties) {
+        return repaymentSourceProperties
+                .stream()
+                .map(r -> new F303RepaymentSourceProperties()
+                        .p94(r.getР93())
+                        .p97(r.getР96())
+                        .p98(r.getР97())
+                        .p104(r.getР913())
+                        .p105(r.getР914())
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303RepaymentSourceContract> getTrancheRepaymentSourceContractsByParam(List<Ф0409303Данные303ДоговорТраншИстТИстДог> repaymentSourceContract) {
+        return repaymentSourceContract
+                .stream()
+                .map(r -> new F303RepaymentSourceContract()
+                        .p102(r.getР911())
+                        .p103(r.getР912())
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303Repayment> getTrancheRepaymentsByParam(List<Ф0409303Данные303ДоговорТраншПогшнТ> repayments) {
+        return repayments
+                .stream()
+                .map(r -> new F303Repayment()
+                        .p99(getLocalDateByXMLGregorianCalendar(r.getР98()))
+                        .p100(getLocalDateByXMLGregorianCalendar(r.getР99()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303Warranty> getTrancheWarrantiesByParam(List<Ф0409303Данные303ДоговорТраншР4ОбеспТ> warranties) {
+        return warranties
+                .stream()
+                .map(w -> new F303Warranty()
+                        .p56(w.getР41())
+                        .p57(w.getР42())
+                        .p58(getLocalDateByXMLGregorianCalendar(w.getР43()))
+                        .p59(w.getР44())
+                        .p60(w.getР45Н())
+                        .p61(w.getР46Н())
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303SpecialCondition> getTranchegetConditionCodesByParam(List<Ф0409303Данные303ДоговорТраншУслТ> conditionCode) {
+        return conditionCode
+                .stream()
+                .map(v -> new F303SpecialCondition()
+                        .p49(v.getР315())
+                        .conditionsCodeConds(getTrancheConditionsCodeConds(v.getДогПоУсл()))
+                )
+                .collect(Collectors.toList());
+    }
+
+    private static List<F303SpecialConditionProperty> getTrancheConditionsCodeConds(List<Ф0409303Данные303ДоговорТраншУслТДогПоУсл> conditionsCodeConds) {
+        return conditionsCodeConds
+                .stream()
+                .map(v -> new F303SpecialConditionProperty()
+                        .p50(v.getР316())
+                        .p51(v.getР316Рг()))
                 .collect(Collectors.toList());
     }
 
@@ -167,43 +352,20 @@ public class FactoryF303 {
                 .collect(Collectors.toList());
     }
 
-    private static F303Conditions getConditionsByParam(Ф0409303Данные303ДоговорР3 conditions, List<Ф0409303Данные303ДоговорУсл> conditionCode) {
-        final List<F303ConditionsCode> conditionsCodes = conditionCode
+    private static List<F303SpecialCondition> getConditionCodesByParam(List<Ф0409303Данные303ДоговорУсл> conditionCode) {
+        return conditionCode
                 .stream()
-                .map(v -> new F303ConditionsCode()
+                .map(v -> new F303SpecialCondition()
                         .p49(v.getР315())
                         .conditionsCodeConds(getConditionsCodeConds(v.getДогПоУсл()))
                 )
                 .collect(Collectors.toList());
-
-        return new F303Conditions()
-                .p35(conditions.getР31())
-                .p36(conditions.getР32())
-                .p37(conditions.getР33())
-                .p38(conditions.getР34())
-                .p39(conditions.getР35())
-                .p40(conditions.getР36())
-                .p41(getLocalDateByXMLGregorianCalendar(conditions.getР37()))
-                .p42(getLocalDateByXMLGregorianCalendar(conditions.getР38()))
-                .p43(conditions.getР39())
-                .p44(conditions.getР310())
-                .p45(conditions.getР311())
-                .p46(conditions.getР312())
-                .p47(conditions.getР313Н())
-                .p48(conditions.getР314())
-                .conditionsCodes(conditionsCodes)
-                .p52(conditions.getР317())
-                .p53(conditions.getР318())
-                .p54(conditions.getР319())
-                .p55(conditions.getР320());
-
-
     }
 
-    private static List<F303ConditionsCodeCond> getConditionsCodeConds(List<Ф0409303Данные303ДоговорУслДогПоУсл> conditionsCodeConds) {
+    private static List<F303SpecialConditionProperty> getConditionsCodeConds(List<Ф0409303Данные303ДоговорУслДогПоУсл> conditionsCodeConds) {
         return conditionsCodeConds
                 .stream()
-                .map(v -> new F303ConditionsCodeCond()
+                .map(v -> new F303SpecialConditionProperty()
                         .p50(v.getР316())
                         .p51(v.getР316Рг()))
                 .collect(Collectors.toList());
@@ -228,21 +390,21 @@ public class FactoryF303 {
         final List<F303ClientGVZ> clientGVZs = clientGVZ
                 .stream()
                 .map(c -> new F303ClientGVZ()
-                        .groupNumber_p11(c.getР110())
-                        .groupName_p12(c.getР111()))
+                        .p11(c.getР110())
+                        .p12(c.getР111()))
                 .collect(Collectors.toList());
 
         return new F303Client()
-                .name_p1(client.getР11())
-                .ogrn_p2(client.getР12())
-                .ogrnIp_p3(client.getР13())
-                .ogrnDate_p4(getLocalDateByXMLGregorianCalendar(client.getР14()))
-                .inn_p5(client.getР15())
-                .innDescription_p6(client.getР15Тип())
-                .okpo_p7(client.getР16())
-                .countryCode_p8(client.getР17())
-                .settingKo_p9(client.getР18())
-                .businessCode_p10(client.getР19())
+                .p1(client.getР11())
+                .p2(client.getР12())
+                .p3(client.getР13())
+                .p4(getLocalDateByXMLGregorianCalendar(client.getР14()))
+                .p5(client.getР15())
+                .p6(client.getР15Тип())
+                .p7(client.getР16())
+                .p8(client.getР17())
+                .p9(client.getР18())
+                .p10(client.getР19())
                 .clientGVZs(clientGVZs);
     }
 }

@@ -11,9 +11,9 @@ import java.util.List;
 @Data
 @ToString
 @Accessors(fluent = true)
-public class F303ConditionsCode {
+public class F303SpecialCondition {
     private String p49;
 
     // p3_50 p3_51
-    private List<F303ConditionsCodeCond> conditionsCodeConds;
+    private List<F303SpecialConditionProperty> conditionsCodeConds;
 }

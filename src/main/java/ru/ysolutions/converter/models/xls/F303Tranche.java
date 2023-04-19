@@ -6,7 +6,9 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDate;
+import java.util.List;
 
 @NoArgsConstructor
 @Data
@@ -14,12 +16,31 @@ import java.time.LocalDate;
 @Accessors(fluent = true)
 public class F303Tranche {
     // p2
-
+    private BigInteger p22;
+    private LocalDate p25;
+    private String p33;
     // p3
-
+    private String p36;
+    private BigDecimal p37;
+    private BigDecimal p38;
+    private String p39;
+    private String p40;
+    private LocalDate p41;
+    private LocalDate p42;
+    private String p43;
+    private BigDecimal p44;
+    private BigDecimal p45;
+    private BigDecimal p46;
+    private BigInteger p47;
+    private String p48;
+    // 49/50/51
+    private List<F303SpecialCondition> conditionsCodes;
+    private String p52;
+    private String p53;
+    private BigDecimal p54;
+    private BigDecimal p55;
     // p4
-
-
+    private List<F303Warranty> warranties;
     // p5
     private LocalDate p62;
     private String p63;
@@ -30,8 +51,6 @@ public class F303Tranche {
     private String p68;
     private BigDecimal p69;
     private String p70;
-
-
     // p6
     private String p71;
     private String p72;
@@ -47,41 +66,23 @@ public class F303Tranche {
     private String p82;
     private String p83;
     private String p84;
-
     // p7
     private BigDecimal p85;
     private BigDecimal p86;
     private BigDecimal p87;
-
     // p9
-//    @XmlAttribute(name = "\u04209_1")
-//    protected String р91;
-//    @XmlAttribute(name = "\u04209_2")
-//    protected BigDecimal р92;
-//    @XmlAttribute(name = "\u04209_3")
-//    protected BigDecimal р93;
-//    @XmlAttribute(name = "\u04209_4")
-//    protected String р94;
-//    @XmlAttribute(name = "\u04209_5")
-//    protected BigDecimal р95;
-//    @XmlAttribute(name = "\u04209_6")
-//    protected BigDecimal р96;
-//    @XmlAttribute(name = "\u04209_7")
-//    protected BigDecimal р97;
-//    @XmlAttribute(name = "\u04209_8")
-//    protected LocalDate р98;
-//
-//    protected List<Ф0409303Данные303ДоговорПогшн> погшн;
-//
-//    @XmlAttribute(name = "\u04209_10", required = true)
-//    protected String р910;
-//
-//    @XmlElement(name = "\u0418\u0441\u0442\u0414\u043e\u0433")
-//    protected List<Ф0409303Данные303ДоговорИстИстДог> истДог;
-//
-//    @XmlElement(name = "\u0418\u0441\u0442\u0421\u0443\u043c")
-//    protected List<Ф0409303Данные303ДоговорИстИстСум> истСум;
-//
-//    protected String р913;
-//    protected String р914;
+    private String p92;
+    private BigDecimal p93;
+    private BigDecimal p94;
+    private String p95;
+    private BigDecimal p96;
+    private BigDecimal p97;
+    private BigDecimal p98;
+    private LocalDate p99;
+    //p99/p100
+    private List<F303Repayment> f303Repayments;
+    //p94/p97/p98/p101/102/103/104/105
+    private List<F303RepaymentSource> f303RepaymentSources;
+    private String p104;
+    private String p105;
 }

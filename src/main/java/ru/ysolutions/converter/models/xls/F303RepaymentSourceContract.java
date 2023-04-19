@@ -9,7 +9,9 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @Accessors(fluent = true)
-public class F303ConditionsCodeCond {
-    protected String p50;
-    protected String p51;
+public class F303RepaymentSourceContract {
+    //@XmlAttribute(name = "\u04209_11")
+    private String p102;
+    //@XmlAttribute(name = "\u04209_12")
+    private String p103;
 }
