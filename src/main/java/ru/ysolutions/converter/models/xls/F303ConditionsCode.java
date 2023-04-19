@@ -12,7 +12,7 @@ import java.util.List;
 @ToString
 @Accessors(fluent = true)
 public class F303ConditionsCode {
-    private String p3_49;
+    private String p49;
 
     // p3_50 p3_51
     private List<F303ConditionsCodeCond> conditionsCodeConds;

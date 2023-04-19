@@ -13,11 +13,11 @@ import java.time.LocalDate;
 @ToString
 @Accessors(fluent = true)
 public class F303Encumbrance {
-    private String p2_26;
-    private String p2_27;
-    private String p2_28;
-    private String p2_29;
-    private String p2_30;
-    private BigDecimal p2_31;
-    private LocalDate p2_32;
+    private String p26;
+    private String p27;
+    private String p28;
+    private String p29;
+    private String p30;
+    private BigDecimal p31;
+    private LocalDate p32;
 }

@@ -1,12 +1,10 @@
 package ru.ysolutions.converter.models.xls;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 

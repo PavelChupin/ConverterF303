@@ -11,6 +11,6 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(fluent = true)
 public class F303ClientGVZ {
-    private String groupNumber_p1_11;
-    private String groupName_p1_12;
+    private String groupNumber_p11;
+    private String groupName_p12;
 }

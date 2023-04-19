@@ -92,80 +92,80 @@ public class ConverterExcel {
             //Row rowNumber = row.getSheet().getRow(startContractRow);
             // Записываем в строку клиента
             // 1
-            saveValueToCellString(row, 0, f303Contract.client().name_p1_1(), this.stringStyle);
+            saveValueToCellString(row, 0, f303Contract.client_p1().name_p1(), this.stringStyle);
 
             // 2
-            saveValueToCellString(row, 1, f303Contract.client().ogrn_p1_2(), this.stringStyle);
+            saveValueToCellString(row, 1, f303Contract.client_p1().ogrn_p2(), this.stringStyle);
 
             // 3
-            saveValueToCellString(row, 2, f303Contract.client().ogrnIp_p1_3(), this.stringStyle);
+            saveValueToCellString(row, 2, f303Contract.client_p1().ogrnIp_p3(), this.stringStyle);
 
             // 4
-            saveValueToCellDate(row, 3, f303Contract.client().ogrnDate_p1_4(), this.dateStyle);
+            saveValueToCellDate(row, 3, f303Contract.client_p1().ogrnDate_p4(), this.dateStyle);
 
             // 5
-            saveValueToCellString(row, 4, f303Contract.client().inn_p1_5(), this.stringStyle);
+            saveValueToCellString(row, 4, f303Contract.client_p1().inn_p5(), this.stringStyle);
 
             // 6
-            saveValueToCellString(row, 5, f303Contract.client().innDescription_p1_6(), this.stringStyle);
+            saveValueToCellString(row, 5, f303Contract.client_p1().innDescription_p6(), this.stringStyle);
 
             // 7
-            saveValueToCellString(row, 6, f303Contract.client().okpo_p1_7(), this.stringStyle);
+            saveValueToCellString(row, 6, f303Contract.client_p1().okpo_p7(), this.stringStyle);
 
             // 8
-            saveValueToCellString(row, 7, f303Contract.client().countryCode_p1_8(), this.stringStyle);
+            saveValueToCellString(row, 7, f303Contract.client_p1().countryCode_p8(), this.stringStyle);
 
             // 9
-            saveValueToCellString(row, 8, f303Contract.client().settingKo_p1_9(), this.stringStyle);
+            saveValueToCellString(row, 8, f303Contract.client_p1().settingKo_p9(), this.stringStyle);
 
             // 10
-            saveValueToCellString(row, 9, f303Contract.client().businessCode_p1_10(), this.stringStyle);
+            saveValueToCellString(row, 9, f303Contract.client_p1().businessCode_p10(), this.stringStyle);
 
             // 11/12
-            rowEnd = saveClientGVZ(startContractRow, sheet, f303Contract.client().clientGVZs());
+            rowEnd = saveClientGVZ(startContractRow, sheet, f303Contract.client_p1().clientGVZs());
             if (maxContractRow < rowEnd) {
                 maxContractRow = rowEnd;
             }
             row = sheet.getRow(startContractRow);
 
             // 13
-            saveValueToCellString(row, 12, f303Contract.contractId_p2_13(), this.stringStyle);
+            saveValueToCellString(row, 12, f303Contract.contractId_p13(), this.stringStyle);
 
             // 14
-            saveValueToCellString(row, 13, f303Contract.contractNumber_p2_14(), this.stringStyle);
+            saveValueToCellString(row, 13, f303Contract.contractNumber_p14(), this.stringStyle);
 
             // 15
-            saveValueToCellDate(row, 14, f303Contract.contractDate_p2_15(), this.dateStyle);
+            saveValueToCellDate(row, 14, f303Contract.contractDate_p15(), this.dateStyle);
 
             // 16
-            saveValueToCellString(row, 15, f303Contract.numberBuyClaimRights_p2_16(), this.stringStyle);
+            saveValueToCellString(row, 15, f303Contract.numberBuyClaimRights_p16(), this.stringStyle);
 
             // 17
-            saveValueToCellDate(row, 16, f303Contract.dateBuyClaimRights_p2_17(), this.dateStyle);
+            saveValueToCellDate(row, 16, f303Contract.dateBuyClaimRights_p17(), this.dateStyle);
 
             // 18
-            saveValueToCellString(row, 17, f303Contract.nameOrganizationBuyClaimRights_p2_18(), this.stringStyle);
+            saveValueToCellString(row, 17, f303Contract.nameOrganizationBuyClaimRights_p18(), this.stringStyle);
 
             // 19
-            saveValueToCellString(row, 18, f303Contract.ogrnOrganizationBuyClaimRights_p2_19(), this.stringStyle);
+            saveValueToCellString(row, 18, f303Contract.ogrnOrganizationBuyClaimRights_p19(), this.stringStyle);
 
             // 20
-            saveValueToCellString(row, 19, f303Contract.regNumberOrganizationBuyClaimRights_p2_20(), this.stringStyle);
+            saveValueToCellString(row, 19, f303Contract.regNumberOrganizationBuyClaimRights_p20(), this.stringStyle);
 
             // 21
-            saveValueToCellString(row, 20, f303Contract.okcmOrganizationBuyClaimRights_p2_21(), this.stringStyle);
+            saveValueToCellString(row, 20, f303Contract.okcmOrganizationBuyClaimRights_p21(), this.stringStyle);
 
             // 22
-            saveValueToBigInteger(row, 21, f303Contract.countRestrict_p2_22(), this.stringStyle);
+            saveValueToBigInteger(row, 21, f303Contract.countRestrict_p22(), this.stringStyle);
 
             // 23
-            saveValueToCellString(row, 22, f303Contract.informationBancrot_p2_23(), this.stringStyle);
+            saveValueToCellString(row, 22, f303Contract.informationBancrot_p23(), this.stringStyle);
 
             // 24
-            saveValueToCellDate(row, 23, f303Contract.dateInformationBancrot_p2_24(), this.dateStyle);
+            saveValueToCellDate(row, 23, f303Contract.dateInformationBancrot_24(), this.dateStyle);
 
             // 25
-            saveValueToCellDate(row, 24, f303Contract.dateLastRestrict_p2_25(), this.dateStyle);
+            saveValueToCellDate(row, 24, f303Contract.dateLastRestrict_p25(), this.dateStyle);
 
             // 26/27/28/29/30/31/32
             rowEnd = saveEncumbrance(startContractRow, sheet, f303Contract.encumbrances());
@@ -175,52 +175,52 @@ public class ConverterExcel {
             row = sheet.getRow(startContractRow);
 
             // 33
-            saveValueToCellString(row, 32, f303Contract.kindRestrict_p2_33(), this.stringStyle);
+            saveValueToCellString(row, 32, f303Contract.kindRestrict_p33(), this.stringStyle);
 
             // 34
-            saveValueToCellString(row, 33, f303Contract.contractUID_p2_34(), this.stringStyle);
+            saveValueToCellString(row, 33, f303Contract.contractUID_p34(), this.stringStyle);
 
             // 35
-            saveValueToCellString(row, 34, f303Contract.conditions().p3_35(), this.stringStyle);
+            saveValueToCellString(row, 34, f303Contract.conditions().p35(), this.stringStyle);
 
             // 36
-            saveValueToCellString(row, 35, f303Contract.conditions().p3_36(), this.stringStyle);
+            saveValueToCellString(row, 35, f303Contract.conditions().p36(), this.stringStyle);
 
             // 37
-            saveValueToCellBigDecimal(row, 36, f303Contract.conditions().p3_37(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 36, f303Contract.conditions().p37(), this.stringStyle);
 
             // 38
-            saveValueToCellBigDecimal(row, 37, f303Contract.conditions().p3_38(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 37, f303Contract.conditions().p38(), this.stringStyle);
 
             // 39
-            saveValueToCellString(row, 38, f303Contract.conditions().p3_39(), this.stringStyle);
+            saveValueToCellString(row, 38, f303Contract.conditions().p39(), this.stringStyle);
 
             // 40
-            saveValueToCellString(row, 39, f303Contract.conditions().p3_40(), this.stringStyle);
+            saveValueToCellString(row, 39, f303Contract.conditions().p40(), this.stringStyle);
 
             // 41
-            saveValueToCellDate(row, 40, f303Contract.conditions().p3_41(), this.dateStyle);
+            saveValueToCellDate(row, 40, f303Contract.conditions().p41(), this.dateStyle);
 
             // 42
-            saveValueToCellDate(row, 41, f303Contract.conditions().p3_42(), this.dateStyle);
+            saveValueToCellDate(row, 41, f303Contract.conditions().p42(), this.dateStyle);
 
             // 43
-            saveValueToCellString(row, 42, f303Contract.conditions().p3_43(), this.stringStyle);
+            saveValueToCellString(row, 42, f303Contract.conditions().p43(), this.stringStyle);
 
             // 44
-            saveValueToCellBigDecimal(row, 43, f303Contract.conditions().p3_44(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 43, f303Contract.conditions().p44(), this.stringStyle);
 
             // 45
-            saveValueToCellBigDecimal(row, 44, f303Contract.conditions().p3_45(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 44, f303Contract.conditions().p45(), this.stringStyle);
 
             // 46
-            saveValueToCellBigDecimal(row, 45, f303Contract.conditions().p3_46(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 45, f303Contract.conditions().p46(), this.stringStyle);
 
             // 47
-            saveValueToBigInteger(row, 46, f303Contract.conditions().p3_47(), this.stringStyle);
+            saveValueToBigInteger(row, 46, f303Contract.conditions().p47(), this.stringStyle);
 
             // 48
-            saveValueToCellString(row, 47, f303Contract.conditions().p3_48(), this.stringStyle);
+            saveValueToCellString(row, 47, f303Contract.conditions().p48(), this.stringStyle);
 
             // 49/50/51
             rowEnd = saveConditionsCode(startContractRow, sheet, f303Contract.conditions().conditionsCodes());
@@ -230,16 +230,16 @@ public class ConverterExcel {
             row = sheet.getRow(startContractRow);
 
             // 52
-            saveValueToCellString(row, 51, f303Contract.conditions().p3_52(), this.stringStyle);
+            saveValueToCellString(row, 51, f303Contract.conditions().p52(), this.stringStyle);
 
             // 53
-            saveValueToCellString(row, 52, f303Contract.conditions().p3_53(), this.stringStyle);
+            saveValueToCellString(row, 52, f303Contract.conditions().p53(), this.stringStyle);
 
             // 54
-            saveValueToCellBigDecimal(row, 53, f303Contract.conditions().p3_54(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 53, f303Contract.conditions().p54(), this.stringStyle);
 
             // 55
-            saveValueToCellBigDecimal(row, 54, f303Contract.conditions().p3_55(), this.stringStyle);
+            saveValueToCellBigDecimal(row, 54, f303Contract.conditions().p55(), this.stringStyle);
 
             // 56/57/58/59/60/61
             rowEnd = saveWarranty(startContractRow, sheet, f303Contract.warranties());
@@ -248,12 +248,92 @@ public class ConverterExcel {
             }
             row = sheet.getRow(startContractRow);
 
-            // 62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84
-            rowEnd = saveTranche(startContractRow, sheet, f303Contract.tranches());
+            // 62
+            saveValueToCellDate(row, 61, f303Contract.p62(), this.dateStyle);
+            // 63
+            saveValueToCellString(row, 62, f303Contract.p63(), this.stringStyle);
+            // 64
+            saveValueToCellBigDecimal(row, 63, f303Contract.p64(), this.stringStyle);
+            // 65
+            saveValueToCellString(row, 64, f303Contract.p65(), this.stringStyle);
+            // 66
+            saveValueToCellString(row, 65, f303Contract.p66(), this.stringStyle);
+            // 67
+            saveValueToCellBigDecimal(row, 66, f303Contract.p67(), this.stringStyle);
+            // 68
+            saveValueToCellString(row, 67, f303Contract.p68(), this.stringStyle);
+            // 69
+            saveValueToCellBigDecimal(row, 68, f303Contract.p69(), this.stringStyle);
+            // 70
+            saveValueToCellString(row, 69, f303Contract.p70(), this.stringStyle);
+            // 71
+            saveValueToCellString(row, 70, f303Contract.p71(), this.stringStyle);
+            // 72
+            saveValueToCellString(row, 71, f303Contract.p72(), this.stringStyle);
+            // 73
+            saveValueToCellBigDecimal(row, 72, f303Contract.p73(), this.stringStyle);
+            // 74
+            saveValueToCellBigDecimal(row, 73, f303Contract.p74(), this.stringStyle);
+            // 75
+            saveValueToCellString(row, 74, f303Contract.p75(), this.stringStyle);
+            // 76
+            saveValueToCellString(row, 75, f303Contract.p76(), this.stringStyle);
+            // 77
+            saveValueToCellBigDecimal(row, 76, f303Contract.p77(), this.stringStyle);
+            // 78
+            saveValueToCellBigDecimal(row, 77, f303Contract.p78(), this.stringStyle);
+            // 79
+            saveValueToCellBigDecimal(row, 78, f303Contract.p79(), this.stringStyle);
+            // 80
+            saveValueToCellString(row, 79, f303Contract.p80(), this.stringStyle);
+            // 81
+            saveValueToCellString(row, 80, f303Contract.p81(), this.stringStyle);
+            // 82
+            saveValueToCellString(row, 81, f303Contract.p82(), this.stringStyle);
+            // 83
+            saveValueToCellString(row, 82, f303Contract.p83(), this.stringStyle);
+            // 84
+            saveValueToCellString(row, 83, f303Contract.p84(), this.stringStyle);
+            // 85
+            saveValueToCellBigDecimal(row, 84, f303Contract.p85(), this.stringStyle);
+            // 86
+            saveValueToCellBigDecimal(row, 85, f303Contract.p86(), this.stringStyle);
+            // 87
+            saveValueToCellBigDecimal(row, 86, f303Contract.p87(), this.stringStyle);
+
+
+
+
+            // 88
+            saveValueToCellBigDecimal(row, 87, f303Contract.p88(), this.stringStyle);
+            // 89
+            saveValueToCellBigDecimal(row, 88, f303Contract.p89(), this.stringStyle);
+            // 90
+            saveValueToCellBigDecimal(row, 89, f303Contract.p90(), this.stringStyle);
+            // 91
+            saveValueToCellBigDecimal(row, 90, f303Contract.p91(), this.stringStyle);
+
+
+
+
+
+            // 106/107/108/109/110/111/112/113/114
+            rowEnd = saveP10(startContractRow, sheet, f303Contract.p10());
             if (maxContractRow < rowEnd) {
                 maxContractRow = rowEnd;
             }
             row = sheet.getRow(startContractRow);
+
+
+            // Транши
+            // 62/63/64/65/66/67/68/69/70/71/72/73/74/75/76/77/78/79/80/81/82/83/84/85/86/87
+            rowEnd = saveTranches(maxContractRow, sheet, f303Contract.tranches());
+            if (maxContractRow < rowEnd) {
+                maxContractRow = rowEnd;
+            }
+            row = sheet.getRow(startContractRow);
+
+
         }
 
         // Меняем размер столбцов
@@ -263,9 +343,40 @@ public class ConverterExcel {
         return this.workBook;
     }
 
-    // 62/63/64/65/66/67/68/69/70
-    private int saveTranche(int startContractRow, Sheet sheet, List<F303Tranche> tranches) {
+    // 106/107/108/109/110/111/112/113/114
+    private int saveP10(int startContractRow, Sheet sheet, List<F303p10> p10) {
         int number = startContractRow - 1;
+        for (F303p10 p : p10) {
+            number++;
+            Row rowNumber = sheet.getRow(number);
+            if (rowNumber == null) {
+                rowNumber = sheet.createRow(number);
+            }
+            // 106
+            saveValueToCellString(rowNumber, 105, p.p106(), this.stringStyle);
+            // 107
+            saveValueToCellBigDecimal(rowNumber, 106, p.p107(), this.stringStyle);
+            // 108
+            saveValueToCellBigDecimal(rowNumber, 107, p.p108(), this.stringStyle);
+            // 109
+            saveValueToCellString(rowNumber, 108, p.p109(), this.stringStyle);
+            // 110
+            saveValueToCellString(rowNumber, 109, p.p110(), this.stringStyle);
+            // 111
+            saveValueToCellString(rowNumber, 110, p.p111(), this.stringStyle);
+            // 112
+            saveValueToCellString(rowNumber, 111, p.p112(), this.stringStyle);
+            // 113
+            saveValueToCellBigDecimal(rowNumber, 112, p.p113(), this.stringStyle);
+            // 114
+            saveValueToCellString(rowNumber, 113, p.p114(), this.stringStyle);
+        }
+        return number;
+    }
+
+    // 62/63/64/65/66/67/68/69/70
+    private int saveTranches(int maxContractRow, Sheet sheet, List<F303Tranche> tranches) {
+        int number = maxContractRow;
         for (F303Tranche tranche : tranches) {
             number++;
             Row rowNumber = sheet.getRow(number);
@@ -291,33 +402,39 @@ public class ConverterExcel {
             // 70
             saveValueToCellString(rowNumber, 69, tranche.p70(), this.stringStyle);
             // 71
-            saveValueToCellString(rowNumber, 70, tranche.f303InfoDebtOD().p71(), this.stringStyle);
+            saveValueToCellString(rowNumber, 70, tranche.p71(), this.stringStyle);
             // 72
-            saveValueToCellString(rowNumber, 71, tranche.f303InfoDebtOD().p72(), this.stringStyle);
+            saveValueToCellString(rowNumber, 71, tranche.p72(), this.stringStyle);
             // 73
-            saveValueToCellBigDecimal(rowNumber, 72, tranche.f303InfoDebtOD().p73(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 72, tranche.p73(), this.stringStyle);
             // 74
-            saveValueToCellBigDecimal(rowNumber, 73, tranche.f303InfoDebtOD().p74(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 73, tranche.p74(), this.stringStyle);
             // 75
-            saveValueToCellString(rowNumber, 74, tranche.f303InfoDebtOD().p75(), this.stringStyle);
+            saveValueToCellString(rowNumber, 74, tranche.p75(), this.stringStyle);
             // 76
-            saveValueToCellString(rowNumber, 75, tranche.f303InfoDebtOD().p76(), this.stringStyle);
+            saveValueToCellString(rowNumber, 75, tranche.p76(), this.stringStyle);
             // 77
-            saveValueToCellBigDecimal(rowNumber, 76, tranche.f303InfoDebtOD().p77(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 76, tranche.p77(), this.stringStyle);
             // 78
-            saveValueToCellBigDecimal(rowNumber, 77, tranche.f303InfoDebtOD().p78(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 77, tranche.p78(), this.stringStyle);
             // 79
-            saveValueToCellBigDecimal(rowNumber, 78, tranche.f303InfoDebtOD().p79(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 78, tranche.p79(), this.stringStyle);
             // 80
-            saveValueToCellString(rowNumber, 79, tranche.f303InfoDebtOD().p80(), this.stringStyle);
+            saveValueToCellString(rowNumber, 79, tranche.p80(), this.stringStyle);
             // 81
-            saveValueToCellString(rowNumber, 80, tranche.f303InfoDebtOD().p81(), this.stringStyle);
+            saveValueToCellString(rowNumber, 80, tranche.p81(), this.stringStyle);
             // 82
-            saveValueToCellString(rowNumber, 81, tranche.f303InfoDebtOD().p82(), this.stringStyle);
+            saveValueToCellString(rowNumber, 81, tranche.p82(), this.stringStyle);
             // 83
-            saveValueToCellString(rowNumber, 82, tranche.f303InfoDebtOD().p83(), this.stringStyle);
+            saveValueToCellString(rowNumber, 82, tranche.p83(), this.stringStyle);
             // 84
-            saveValueToCellString(rowNumber, 83, tranche.f303InfoDebtOD().p84(), this.stringStyle);
+            saveValueToCellString(rowNumber, 83, tranche.p84(), this.stringStyle);
+            // 85
+            saveValueToCellBigDecimal(rowNumber, 84, tranche.p85(), this.stringStyle);
+            // 86
+            saveValueToCellBigDecimal(rowNumber, 85, tranche.p86(), this.stringStyle);
+            // 87
+            saveValueToCellBigDecimal(rowNumber, 86, tranche.p87(), this.stringStyle);
         }
         return number;
     }
@@ -357,7 +474,7 @@ public class ConverterExcel {
                 rowNumber = sheet.createRow(number);
             }
             // 49
-            saveValueToCellString(rowNumber, 48, f303ConditionsCode.p3_49(), this.stringStyle);
+            saveValueToCellString(rowNumber, 48, f303ConditionsCode.p49(), this.stringStyle);
             // 50/51
             int maxContractRow = saveConditionsCodeCond(number, sheet, f303ConditionsCode.conditionsCodeConds());
             if (number < maxContractRow) {
@@ -377,9 +494,9 @@ public class ConverterExcel {
                 rowNumber = sheet.createRow(number);
             }
             // 50
-            saveValueToCellString(rowNumber, 49, f303ConditionsCodeCond.p3_50(), this.stringStyle);
+            saveValueToCellString(rowNumber, 49, f303ConditionsCodeCond.p50(), this.stringStyle);
             // 51
-            saveValueToCellString(rowNumber, 50, f303ConditionsCodeCond.p3_51(), this.stringStyle);
+            saveValueToCellString(rowNumber, 50, f303ConditionsCodeCond.p51(), this.stringStyle);
 
         }
         return number;
@@ -395,19 +512,19 @@ public class ConverterExcel {
                 rowNumber = sheet.createRow(number);
             }
             // 26
-            saveValueToCellString(rowNumber, 25, f303Encumbrance.p2_26(), this.stringStyle);
+            saveValueToCellString(rowNumber, 25, f303Encumbrance.p26(), this.stringStyle);
             // 27
-            saveValueToCellString(rowNumber, 26, f303Encumbrance.p2_27(), this.stringStyle);
+            saveValueToCellString(rowNumber, 26, f303Encumbrance.p27(), this.stringStyle);
             // 28
-            saveValueToCellString(rowNumber, 27, f303Encumbrance.p2_28(), this.stringStyle);
+            saveValueToCellString(rowNumber, 27, f303Encumbrance.p28(), this.stringStyle);
             // 29
-            saveValueToCellString(rowNumber, 28, f303Encumbrance.p2_29(), this.stringStyle);
+            saveValueToCellString(rowNumber, 28, f303Encumbrance.p29(), this.stringStyle);
             // 30
-            saveValueToCellString(rowNumber, 29, f303Encumbrance.p2_30(), this.stringStyle);
+            saveValueToCellString(rowNumber, 29, f303Encumbrance.p30(), this.stringStyle);
             // 31
-            saveValueToCellBigDecimal(rowNumber, 30, f303Encumbrance.p2_31(), this.stringStyle);
+            saveValueToCellBigDecimal(rowNumber, 30, f303Encumbrance.p31(), this.stringStyle);
             // 32
-            saveValueToCellDate(rowNumber, 31, f303Encumbrance.p2_32(), this.dateStyle);
+            saveValueToCellDate(rowNumber, 31, f303Encumbrance.p32(), this.dateStyle);
         }
         return number;
     }
@@ -422,9 +539,9 @@ public class ConverterExcel {
                 rowNumber = sheet.createRow(number);
             }
             // 11
-            saveValueToCellString(rowNumber, 10, f303ClientGVZ.groupNumber_p1_11(), this.stringStyle);
+            saveValueToCellString(rowNumber, 10, f303ClientGVZ.groupNumber_p11(), this.stringStyle);
             // 12
-            saveValueToCellString(rowNumber, 11, f303ClientGVZ.groupName_p1_12(), this.stringStyle);
+            saveValueToCellString(rowNumber, 11, f303ClientGVZ.groupName_p12(), this.stringStyle);
         }
         return number;
     }

@@ -10,6 +10,6 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(fluent = true)
 public class F303ConditionsCodeCond {
-    protected String p3_50;
-    protected String p3_51;
+    protected String p50;
+    protected String p51;
 }
