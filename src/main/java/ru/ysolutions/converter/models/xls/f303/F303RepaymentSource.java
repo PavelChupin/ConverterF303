@@ -1,6 +1,5 @@
-package ru.ysolutions.converter.models.xls;
+package ru.ysolutions.converter.models.xls.f303;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

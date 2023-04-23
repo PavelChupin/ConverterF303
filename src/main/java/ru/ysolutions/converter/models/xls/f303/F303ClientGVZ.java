@@ -1,4 +1,4 @@
-package ru.ysolutions.converter.models.xls;
+package ru.ysolutions.converter.models.xls.f303;
 
 
 import lombok.Data;

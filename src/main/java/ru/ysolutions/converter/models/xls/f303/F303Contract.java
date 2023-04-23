@@ -1,11 +1,9 @@
-package ru.ysolutions.converter.models.xls;
+package ru.ysolutions.converter.models.xls.f303;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
-import ru.ysolutions.converter.models.xml.Ф0409303Данные303ДоговорИст;
-import ru.ysolutions.converter.models.xml.Ф0409303Данные303ДоговорПогшн;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;

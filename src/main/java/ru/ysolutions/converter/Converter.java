@@ -5,8 +5,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ru.ysolutions.converter.exception.ConvertException;
 import ru.ysolutions.converter.helper.ParserHelper;
-import ru.ysolutions.converter.models.xls.F303;
-import ru.ysolutions.converter.models.xls.FactoryF303;
+import ru.ysolutions.converter.models.xls.f303.F303;
+import ru.ysolutions.converter.models.xls.f303.FactoryF303;
 import ru.ysolutions.converter.models.xml.Ф0409303;
 
 import java.io.IOException;
