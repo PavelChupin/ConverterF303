@@ -3,7 +3,10 @@ package ru.ysolutions.converter;
 import jakarta.xml.bind.JAXBException;
 import ru.ysolutions.converter.exception.CheckInputParamsException;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -13,10 +16,11 @@ public class ConverterMain {
 
     public static void main(String[] args) {
         try {
+
             final List<String> params = Arrays.asList(args.clone());
             checkInputParams(params);
             new Converter(Path.of(params.get(0)), Path.of(params.get(1))).convert();
-        } catch (RuntimeException | JAXBException | IOException e) {
+        } catch (RuntimeException | JAXBException | IOException | DatatypeConfigurationException | XMLStreamException e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
         }

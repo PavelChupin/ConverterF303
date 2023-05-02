@@ -24,7 +24,8 @@ public class ConverterExcel {
 
     private final CellStyle moneyStyle;
 
-    public static final int countColumn = 114;
+    public static final int COUNT_COLUMN = 114;
+    public static final String SHEET_NAME = "303_WORK";
 
     public ConverterExcel(Workbook workBook) {
         this.workBook = workBook;
@@ -97,7 +98,7 @@ public class ConverterExcel {
     }
 
     public Workbook getWorkBook(F303 f303Xls) {
-        final Sheet sheet = this.workBook.createSheet("303_WORK");
+        final Sheet sheet = this.workBook.createSheet(SHEET_NAME);
 
         // Формируем шапку отчета
         int endHeaderRow = saveHeaderReport(sheet, f303Xls.reportDate());
@@ -815,7 +816,7 @@ public class ConverterExcel {
 
         // Номера строк
         row = sheet.createRow(1);
-        for (int i = 0; i < countColumn; i++) {
+        for (int i = 0; i < COUNT_COLUMN; i++) {
             saveValueToCellString(row, i, String.valueOf((i + 1)), this.headerNumberStyle);
         }
 

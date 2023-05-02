@@ -5,7 +5,7 @@
 
     <groupId>ru.ysolutions</groupId>
     <artifactId>converter_f303</artifactId>
-    <version>1.0.1</version>
+    <version>1.1.1</version>
     <packaging>jar</packaging>
 
     <name>ConverterF303</name>
@@ -76,8 +76,6 @@
             <scope>provided</scope>
             <optional>true</optional>
         </dependency>
-
-
     </dependencies>
 
     <build>

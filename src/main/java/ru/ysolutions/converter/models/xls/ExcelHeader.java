@@ -142,7 +142,7 @@ public class ExcelHeader {
                 , new ExcelHeaderColumnProperties("Уступка прав требования (цессия): Условия сделки: код валюты", (short) 2000)
         );
 
-        for (int i = 0; i < ConverterExcel.countColumn; i++) {
+        for (int i = 0; i < ConverterExcel.COUNT_COLUMN; i++) {
             columnNames.put(i, names.get(i));
         }
 
@@ -267,7 +267,7 @@ public class ExcelHeader {
                 , "9"
         );
 
-        for (int i = 0; i < ConverterExcel.countColumn; i++) {
+        for (int i = 0; i < ConverterExcel.COUNT_COLUMN; i++) {
             columnPart.put(i, nameParts.get(i));
         }
     }

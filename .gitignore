@@ -35,5 +35,5 @@ build/
 ### OTHER ###
 *.log
 *.gz
-0409303.xml
+0409303_old.xml
 !**/src/main/java/META-INF/JAXB/*

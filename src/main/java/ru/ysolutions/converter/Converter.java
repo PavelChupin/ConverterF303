@@ -7,8 +7,12 @@ import ru.ysolutions.converter.exception.ConvertException;
 import ru.ysolutions.converter.helper.ParserHelper;
 import ru.ysolutions.converter.models.xls.f303.F303;
 import ru.ysolutions.converter.models.xls.f303.FactoryF303;
+import ru.ysolutions.converter.models.xml.FactoryF303Xml;
 import ru.ysolutions.converter.models.xml.Ф0409303;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.stream.XMLStreamException;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -21,7 +25,7 @@ public class Converter {
         this.fileTo = fileTo;
     }
 
-    public void convert() throws JAXBException, IOException {
+    public void convert() throws JAXBException, IOException, DatatypeConfigurationException,XMLStreamException {
         final String fileFromEnd = fileFrom.toString().split("\\.")[1].replace("xlsx", "xls");
         final String fileToEnd = fileTo.toString().split("\\.")[1].replace("xlsx", "xls");
         if (fileFromEnd.equals("xls") && fileToEnd.equals("xml")) {
@@ -41,7 +45,13 @@ public class Converter {
     }
 
 
-    private void convertXlsToXml() {
-
+    private void convertXlsToXml() throws IOException, JAXBException,XMLStreamException {
+        try (Workbook workbook = new XSSFWorkbook(new FileInputStream(fileFrom.toFile()))) {
+            final F303 f303Xls = new ConverterXml(workbook).getDataFromXls();
+            final Ф0409303 f303Xml = FactoryF303Xml.getDataXmlByF303(f303Xls);
+            ParserHelper.saveObjectToXMLFile(fileTo, f303Xml);
+        } catch (IOException | JAXBException | XMLStreamException e) {
+            throw e;
+        }
     }
 }
