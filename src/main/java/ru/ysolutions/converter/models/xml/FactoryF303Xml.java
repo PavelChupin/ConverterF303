@@ -1,5 +1,6 @@
 package ru.ysolutions.converter.models.xml;
 
+import org.apache.commons.collections4.CollectionUtils;
 import ru.ysolutions.converter.models.xls.f303.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -83,35 +84,41 @@ public class FactoryF303Xml {
         final Ф0409303Данные303Договор contract = new Ф0409303Данные303Договор();
         // Part 1 клиент
         contract.setР1(getClientByParam(contractParam.client_p1()));
-        contract.getР1ГВЗ().addAll(contractParam.client_p1().clientGVZs()
-                .stream()
-                .map(FactoryF303Xml::getGvzByParam)
-                .collect(Collectors.toList())
-        );
+        if (CollectionUtils.isNotEmpty(contractParam.client_p1().clientGVZs())) {
+            contract.getР1ГВЗ().addAll(contractParam.client_p1().clientGVZs()
+                    .stream()
+                    .map(FactoryF303Xml::getGvzByParam)
+                    .collect(Collectors.toList())
+            );
+        }
 
         // Part 2 договор
         contract.setР21(contractParam.p13());
         contract.setР2(getContractAttrByParam(contractParam));
-        contract.getР2Обрем().addAll(contractParam.encumbrances()
-                .stream()
-                .map(FactoryF303Xml::getEncumbrancyParam)
-                .collect(Collectors.toList())
-        );
-
+        if (CollectionUtils.isNotEmpty(contractParam.encumbrances())) {
+            contract.getР2Обрем().addAll(contractParam.encumbrances()
+                    .stream()
+                    .map(FactoryF303Xml::getEncumbrancyParam)
+                    .collect(Collectors.toList())
+            );
+        }
         // Part 3
         contract.setР3(getConditionByParam(contractParam));
-        contract.getУсл().addAll(contractParam.conditionsCodes()
-                .stream()
-                .map(FactoryF303Xml::getConditionsCodesByParam)
-                .collect(Collectors.toList())
-        );
-
+        if (CollectionUtils.isNotEmpty(contractParam.conditionsCodes())) {
+            contract.getУсл().addAll(contractParam.conditionsCodes()
+                    .stream()
+                    .map(FactoryF303Xml::getConditionsCodesByParam)
+                    .collect(Collectors.toList())
+            );
+        }
         // Part 4
-        contract.getР4Обесп().addAll(contractParam.warranties()
-                .stream()
-                .map(FactoryF303Xml::getWarranty)
-                .collect(Collectors.toList())
-        );
+        if (CollectionUtils.isNotEmpty(contractParam.warranties())) {
+            contract.getР4Обесп().addAll(contractParam.warranties()
+                    .stream()
+                    .map(FactoryF303Xml::getWarranty)
+                    .collect(Collectors.toList())
+            );
+        }
 
         // Part 5
         contract.setР5(getP5ByParam(contractParam));
@@ -127,41 +134,49 @@ public class FactoryF303Xml {
 
         // Part 9
         contract.setР9(getP9ByParam(contractParam));
-        contract.getПогшн().addAll(contractParam.f303Repayments()
-                .stream()
-                .map(FactoryF303Xml::getRepayment)
-                .collect(Collectors.toList())
-        );
-        contract.getИст().addAll(contractParam.f303RepaymentSources()
-                .stream()
-                .map(FactoryF303Xml::getRepaymentSource)
-                .collect(Collectors.toList())
-        );
-
+        if (CollectionUtils.isNotEmpty(contractParam.f303Repayments())) {
+            contract.getПогшн().addAll(contractParam.f303Repayments()
+                    .stream()
+                    .map(FactoryF303Xml::getRepayment)
+                    .collect(Collectors.toList())
+            );
+        }
+        if (CollectionUtils.isNotEmpty(contractParam.f303RepaymentSources())) {
+            contract.getИст().addAll(contractParam.f303RepaymentSources()
+                    .stream()
+                    .map(FactoryF303Xml::getRepaymentSource)
+                    .collect(Collectors.toList())
+            );
+        }
         // Part 10
-        contract.getР10().addAll(contractParam.p10()
-                .stream()
-                .map(FactoryF303Xml::getP10ByParam)
-                .collect(Collectors.toList())
-        );
-
+        if (CollectionUtils.isNotEmpty(contractParam.p10())) {
+            contract.getР10().addAll(contractParam.p10()
+                    .stream()
+                    .map(FactoryF303Xml::getP10ByParam)
+                    .collect(Collectors.toList())
+            );
+        }
         return contract;
     }
 
     private static Ф0409303Данные303ДоговорИст getRepaymentSource(F303RepaymentSource f303RepaymentSource) {
         final Ф0409303Данные303ДоговорИст rp = new Ф0409303Данные303ДоговорИст();
         rp.setР910(f303RepaymentSource.p101());
-        rp.getИстСум().addAll(f303RepaymentSource.f303RepaymentSourceProperties()
-                .stream()
-                .map(FactoryF303Xml::getRepaymentSourceProperties)
-                .collect(Collectors.toList())
+        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceProperties())) {
+            rp.getИстСум().addAll(f303RepaymentSource.f303RepaymentSourceProperties()
+                    .stream()
+                    .map(FactoryF303Xml::getRepaymentSourceProperties)
+                    .collect(Collectors.toList())
 
-        );
-        rp.getИстДог().addAll(f303RepaymentSource.f303RepaymentSourceContracts()
-                .stream()
-                .map(FactoryF303Xml::getRepaymentSourceContracts)
-                .collect(Collectors.toList())
-        );
+            );
+        }
+        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceContracts())) {
+            rp.getИстДог().addAll(f303RepaymentSource.f303RepaymentSourceContracts()
+                    .stream()
+                    .map(FactoryF303Xml::getRepaymentSourceContracts)
+                    .collect(Collectors.toList())
+            );
+        }
 
         return rp;
     }
@@ -265,12 +280,13 @@ public class FactoryF303Xml {
     private static Ф0409303Данные303ДоговорУсл getConditionsCodesByParam(F303SpecialCondition f303SpecialCondition) {
         final Ф0409303Данные303ДоговорУсл condition = new Ф0409303Данные303ДоговорУсл();
         condition.setР315(f303SpecialCondition.p49());
-        condition.getДогПоУсл().addAll(f303SpecialCondition.conditionsCodeConds()
-                .stream()
-                .map(FactoryF303Xml::getConditionsCodesCondByParam)
-                .collect(Collectors.toList())
-        );
-
+        if (CollectionUtils.isNotEmpty(f303SpecialCondition.conditionsCodeConds())) {
+            condition.getДогПоУсл().addAll(f303SpecialCondition.conditionsCodeConds()
+                    .stream()
+                    .map(FactoryF303Xml::getConditionsCodesCondByParam)
+                    .collect(Collectors.toList())
+            );
+        }
         return condition;
     }
 
@@ -390,6 +406,7 @@ public class FactoryF303Xml {
 
     private static XMLGregorianCalendar getXmlGregorianCalendarByLocalDate(LocalDate localDate) {
         try {
+            if (localDate == null) return null;
             final GregorianCalendar gcal = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
             return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
         } catch (DatatypeConfigurationException e) {
@@ -399,6 +416,8 @@ public class FactoryF303Xml {
 
     private static XMLGregorianCalendar getXmlGregorianCalendarByLocalDateTime(LocalDateTime localDateTime) {
         try {
+            if (localDateTime == null) return null;
+
             String iso = localDateTime.toString();
             if (localDateTime.getSecond() == 0 && localDateTime.getNano() == 0) {
                 iso += ":00"; // necessary hack because the second part is not optional in XML

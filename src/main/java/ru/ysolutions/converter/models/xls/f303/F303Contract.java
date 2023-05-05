@@ -31,6 +31,7 @@ public class F303Contract {
     private String p23;
     private LocalDate p24;
     private LocalDate p25;
+    // p26 p27 p28 p29 p30 p31 p32
     private List<F303Encumbrance> encumbrances;
     private String p33;
     private String p34;

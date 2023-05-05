@@ -18,10 +18,10 @@ public class F303 {
     private LocalDate reportDate;
     private List<F303Contract> contracts;
 
-    public void addContract(F303Contract contract) {
+    public List<F303Contract> getContracts() {
         if (CollectionUtils.isEmpty(contracts)){
             this.contracts = new ArrayList<>();
         }
-        this.contracts.add(contract);
+        return contracts;
     }
 }

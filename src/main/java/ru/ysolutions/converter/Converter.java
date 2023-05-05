@@ -13,6 +13,7 @@ import ru.ysolutions.converter.models.xml.Ф0409303;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -41,17 +42,15 @@ public class Converter {
         final Ф0409303 f303Xml = ParserHelper.getObjectFromXMLFile(fileFrom);
         final F303 f303Xls = FactoryF303.getF303ByXmlData(f303Xml);
         final Workbook book = new ConverterExcel(new XSSFWorkbook()).getWorkBook(f303Xls);
-        ParserHelper.writeIntoExcelXlsx(fileTo, book);
+        book.write(new FileOutputStream(fileTo.toFile()));
+        book.close();
     }
-
 
     private void convertXlsToXml() throws IOException, JAXBException,XMLStreamException {
         try (Workbook workbook = new XSSFWorkbook(new FileInputStream(fileFrom.toFile()))) {
             final F303 f303Xls = new ConverterXml(workbook).getDataFromXls();
             final Ф0409303 f303Xml = FactoryF303Xml.getDataXmlByF303(f303Xls);
             ParserHelper.saveObjectToXMLFile(fileTo, f303Xml);
-        } catch (IOException | JAXBException | XMLStreamException e) {
-            throw e;
         }
     }
 }

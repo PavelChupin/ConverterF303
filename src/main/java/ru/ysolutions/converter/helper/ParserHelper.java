@@ -62,18 +62,12 @@ public class ParserHelper {
 
         // маршаллинг объекта в файл
         final XMLStreamWriter xmlStreamWriter =
-                XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()),Charset.forName("windows-1251").toString());
+               // XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()),Charset.forName("windows-1251").toString());
+                XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()));
         xmlStreamWriter.writeProcessingInstruction("xml", "version=\"1.0\" encoding=\"windows-1251\"");
 
         //marshaller.marshal(f303, xmlFileOut.toFile());
         marshaller.marshal(f303, xmlStreamWriter);
         xmlStreamWriter.writeEndDocument();
     }
-
-    public static void writeIntoExcelXlsx(Path fileTo, Workbook book) throws IOException {
-        // Записываем всё в файл
-        book.write(new FileOutputStream(fileTo.toFile()));
-        book.close();
-    }
-
 }
