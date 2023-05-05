@@ -4,6 +4,7 @@ import org.apache.commons.collections4.CollectionUtils;
 import ru.ysolutions.converter.models.xls.f303.*;
 
 import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeConstants;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
@@ -408,7 +409,13 @@ public class FactoryF303Xml {
         try {
             if (localDate == null) return null;
             final GregorianCalendar gcal = GregorianCalendar.from(localDate.atStartOfDay(ZoneId.systemDefault()));
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+            final XMLGregorianCalendar result = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+            result.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+            result.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+            result.setSecond(DatatypeConstants.FIELD_UNDEFINED);
+            result.setMinute(DatatypeConstants.FIELD_UNDEFINED);
+            result.setHour(DatatypeConstants.FIELD_UNDEFINED);
+            return result;
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }
@@ -422,8 +429,10 @@ public class FactoryF303Xml {
             if (localDateTime.getSecond() == 0 && localDateTime.getNano() == 0) {
                 iso += ":00"; // necessary hack because the second part is not optional in XML
             }
-
-            return DatatypeFactory.newInstance().newXMLGregorianCalendar(iso);
+            final XMLGregorianCalendar result = DatatypeFactory.newInstance().newXMLGregorianCalendar(iso);
+            result.setTimezone(DatatypeConstants.FIELD_UNDEFINED);
+            result.setMillisecond(DatatypeConstants.FIELD_UNDEFINED);
+            return result;
         } catch (DatatypeConfigurationException e) {
             throw new RuntimeException(e);
         }

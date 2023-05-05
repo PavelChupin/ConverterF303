@@ -3,6 +3,7 @@ package ru.ysolutions.converter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import ru.ysolutions.converter.data.ConditionBoard;
 import ru.ysolutions.converter.data.ContractBoard;
 import ru.ysolutions.converter.models.xls.f303.*;
 
@@ -11,7 +12,6 @@ import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class ConverterXml {
@@ -38,6 +38,8 @@ public class ConverterXml {
                 .stream()
                 .map(cb -> new F303Contract()
                         .client_p1(getClientByRowXls(cb, sheet))
+
+                        // P2
                         .p13(getStringValue(sheet.getRow(cb.startNumRow()), 12))
                         .p14(getStringValue(sheet.getRow(cb.startNumRow()), 13))
                         .p15(getLocalDateValue(sheet.getRow(cb.startNumRow()), 14))
@@ -55,6 +57,8 @@ public class ConverterXml {
                         .encumbrances(getEncumbrances(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
                         .p33(getStringValue(sheet.getRow(cb.startNumRow()), 32))
                         .p34(getStringValue(sheet.getRow(cb.startNumRow()), 33))
+
+                        // P3
                         .p35(getStringValue(sheet.getRow(cb.startNumRow()), 34))
                         .p36(getStringValue(sheet.getRow(cb.startNumRow()), 35))
                         .p37(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 36))
@@ -75,6 +79,52 @@ public class ConverterXml {
                         .p53(getStringValue(sheet.getRow(cb.startNumRow()), 52))
                         .p54(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 53))
                         .p55(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 54))
+
+                        // P4
+                        .warranties(getWarranties(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
+
+                        // P5
+                        .p62(getLocalDateValue(sheet.getRow(cb.startNumRow()), 61))
+                        .p63(getStringValue(sheet.getRow(cb.startNumRow()), 62))
+                        .p64(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 63))
+                        .p65(getStringValue(sheet.getRow(cb.startNumRow()), 64))
+                        .p66(getStringValue(sheet.getRow(cb.startNumRow()), 65))
+                        .p67(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 66))
+                        .p68(getStringValue(sheet.getRow(cb.startNumRow()), 67))
+                        .p69(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 68))
+                        .p70(getStringValue(sheet.getRow(cb.startNumRow()), 69))
+
+                        // P6
+                        .p71(getStringValue(sheet.getRow(cb.startNumRow()), 70))
+                        .p72(getStringValue(sheet.getRow(cb.startNumRow()), 71))
+                        .p73(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 72))
+                        .p74(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 73))
+                        .p75(getStringValue(sheet.getRow(cb.startNumRow()), 74))
+                        .p76(getStringValue(sheet.getRow(cb.startNumRow()), 75))
+                        .p77(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 76))
+                        .p78(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 77))
+                        .p79(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 78))
+                        .p80(getStringValue(sheet.getRow(cb.startNumRow()), 79))
+                        .p81(getStringValue(sheet.getRow(cb.startNumRow()), 80))
+                        .p82(getStringValue(sheet.getRow(cb.startNumRow()), 81))
+                        .p83(getStringValue(sheet.getRow(cb.startNumRow()), 82))
+                        .p84(getStringValue(sheet.getRow(cb.startNumRow()), 83))
+
+                        // P7
+                        .p85(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 84))
+                        .p86(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 85))
+                        .p87(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 86))
+
+                        // P8
+                        .p88(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 87))
+                        .p89(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 88))
+                        .p90(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 89))
+                        .p91(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 90))
+
+                        // P9
+
+                        // P10
+                        .p10(getP10(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
                 )
                 .collect(Collectors.toList())
         );
@@ -82,34 +132,98 @@ public class ConverterXml {
         return f303;
     }
 
-    private List<F303SpecialCondition> getConditionsCodes(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
-        final List<F303SpecialCondition> f303SpecialConditions = new ArrayList<>();
+    private List<F303p10> getP10(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
+        final List<F303p10> p10 = new ArrayList<>();
         Row row;
-        String p49ValueNow = getStringValue(sheet.getRow(startNumRow), 48);
-        Integer p49StartRowIndex = p49ValueNow != null ? startNumRow : null;
-        Integer p49EndRowIndex = p49StartRowIndex;
-
         for (int i = startNumRow; i <= numRowEndContract; i++) {
             row = sheet.getRow(i);
 
-            if (p49ValueNow == null || p49ValueNow.equalsIgnoreCase(getStringValue(row, 48))
-            ) {
-                p49EndRowIndex = i;
-                p49ValueNow = getStringValue(row, 48);
-            } else {
-                f303SpecialConditions.add(new F303SpecialCondition()
-                        .p49(p49ValueNow)
-                        // p3_50 p3_51
-                        .conditionsCodeConds(getConditionsCodeConds(p49StartRowIndex, p49EndRowIndex, sheet)));
-                p49StartRowIndex = i;
-                p49EndRowIndex = i;
-                p49ValueNow = getStringValue(row, 48);
+            p10.add(new F303p10()
+                    .p106(getStringValue(row, 105))
+                    .p107(getBigDecimalValue(row, 106))
+                    .p108(getBigDecimalValue(row, 107))
+                    .p109(getStringValue(row, 108))
+                    .p110(getStringValue(row, 109))
+                    .p111(getStringValue(row, 110))
+                    .p112(getStringValue(row, 111))
+                    .p113(getBigDecimalValue(row, 112))
+                    .p114(getStringValue(row, 113))
+            );
+        }
+
+        return p10
+                .stream()
+                .filter(e -> e.p106() != null
+                        || e.p107() != null
+                        || e.p108() != null
+                        || e.p109() != null
+                        || e.p110() != null
+                        || e.p111() != null
+                        || e.p112() != null
+                        || e.p113() != null
+                        || e.p114() != null
+                )
+                .collect(Collectors.toList());
+    }
+
+    private List<F303Warranty> getWarranties(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
+        final List<F303Warranty> warranties = new ArrayList<>();
+        Row row;
+        for (int i = startNumRow; i <= numRowEndContract; i++) {
+            row = sheet.getRow(i);
+
+            warranties.add(new F303Warranty()
+                    .p56(getStringValue(row, 55))
+                    .p57(getBigDecimalValue(row, 56))
+                    .p58(getLocalDateValue(row, 57))
+                    .p59(getBigDecimalValue(row, 58))
+                    .p60(getBigDecimalValue(row, 59))
+                    .p61(getBigDecimalValue(row, 60))
+            );
+        }
+
+        return warranties
+                .stream()
+                .filter(e -> e.p56() != null
+                        || e.p57() != null
+                        || e.p58() != null
+                        || e.p59() != null
+                        || e.p60() != null
+                        || e.p61() != null
+                )
+                .collect(Collectors.toList());
+    }
+
+    private List<F303SpecialCondition> getConditionsCodes(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
+        final List<ConditionBoard> conditionBoards = new ArrayList<>();
+
+        Row row;
+        String conditionName = null;
+        for (int i = startNumRow; i <= numRowEndContract; i++) {
+            row = sheet.getRow(i);
+
+            if (row.getCell(48) != null && getStringValue(row, 48) != null) {
+                conditionName = getStringValue(row, 48);
+            }
+
+            if (conditionName != null && !conditionName.isEmpty()) {
+                conditionBoards.add(new ConditionBoard()
+                        .rowIndex(i)
+                        .condition(conditionName)
+                );
             }
         }
 
-        return f303SpecialConditions
+        return conditionBoards.stream()
+                .collect(Collectors.groupingBy(ConditionBoard::condition))
+                .entrySet()
                 .stream()
-                .filter(c -> c.p49() != null)
+                .map(entry -> new F303SpecialCondition()
+                        .p49(entry.getKey())
+                        .conditionsCodeConds(getConditionsCodeConds(entry.getValue().stream().mapToInt(ConditionBoard::rowIndex).min().getAsInt()
+                                , entry.getValue().stream().mapToInt(ConditionBoard::rowIndex).max().getAsInt()
+                                , sheet))
+                )
                 .collect(Collectors.toList());
     }
 
@@ -158,7 +272,8 @@ public class ConverterXml {
                         || e.p29() != null
                         || e.p30() != null
                         || e.p31() != null
-                        || e.p32() != null)
+                        || e.p32() != null
+                )
                 .collect(Collectors.toList());
     }
 
@@ -198,7 +313,7 @@ public class ConverterXml {
     }
 
     private String getStringValue(Row row, Integer cell) {
-        return row.getCell(cell) == null ? null : row.getCell(cell).getStringCellValue();
+        return row.getCell(cell) == null || row.getCell(cell).getStringCellValue().isEmpty() ? null : row.getCell(cell).getStringCellValue();
     }
 
     private LocalDate getLocalDateValue(Row row, Integer cellIndex) {
@@ -232,11 +347,12 @@ public class ConverterXml {
 
             // Если в поле номер транша есть запись, значит начали новый транш.
             if (row.getCell(62) != null
-                    && !getStringValue(row, 62).isEmpty()) {
+                    && getStringValue(row, 62) != null) {
                 if (trancheBoard == null) {
                     trancheBoard = new ContractBoard().startNumRow(i);
                     trancheNumberNow = getStringValue(row, 62);
-                } if (!trancheNumberNow.equalsIgnoreCase(getStringValue(row, 62))){
+                }
+                if (!trancheNumberNow.equalsIgnoreCase(getStringValue(row, 62))) {
                     trancheBoard.endNumRow(i - 1);
                     contractBoard.addTranche(trancheBoard);
                     trancheBoard = new ContractBoard().startNumRow(i);
@@ -250,15 +366,16 @@ public class ConverterXml {
                     && !row.getCell(0).getStringCellValue().isEmpty()
                     && !clientName.equals(row.getCell(0).getStringCellValue())) {
                 contractBoard.endNumRow(i - 1);
-                if (trancheBoard != null){
+                if (trancheBoard != null) {
                     contractBoard.addTranche(trancheBoard.endNumRow(i - 1));
                     trancheBoard = null;
                     trancheNumberNow = null;
                 }
                 contractBoards.add(contractBoard);
                 contractBoard = new ContractBoard().startNumRow(i);
-            } if (i == lastRow){
-                if (trancheBoard != null){
+            }
+            if (i == lastRow) {
+                if (trancheBoard != null) {
                     contractBoard.addTranche(trancheBoard.endNumRow(i));
                     trancheBoard = null;
                     trancheNumberNow = null;

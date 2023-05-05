@@ -4,16 +4,8 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import jakarta.xml.bind.Unmarshaller;
-import org.apache.poi.ss.usermodel.Workbook;
 import ru.ysolutions.converter.models.xml.Ф0409303;
 
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 
 public class ParserHelper {
@@ -40,7 +32,7 @@ public class ParserHelper {
         return (Ф0409303) unmarshaller.unmarshal(xmlFile.toFile());
     }
 
-    public static void saveObjectToXMLFile(Path xmlFileOut, Ф0409303 f303) throws JAXBException, FileNotFoundException, XMLStreamException {
+    public static void saveObjectToXMLFile(Path xmlFileOut, Ф0409303 f303) throws JAXBException {
         JAXBContext context = JAXBContext.newInstance(Ф0409303.class);
         Marshaller marshaller = context.createMarshaller();
 
@@ -49,7 +41,7 @@ public class ParserHelper {
 
         //Убираем standalone из тега заголовка
         //Включаем режим вывода только XML фрагмента без заголовка
-        marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
+        //marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
         //Добавляем заголовок в нужном виде
         //marshaller.setProperty("com.sun.xml.bind.xmlHeaders", "<?xml version=\"1.0\" encoding=\"windows-1251\"?>");
 
@@ -60,14 +52,15 @@ public class ParserHelper {
         //Включаем экранирование символов
         //marshaller.setProperty(CharacterEscapeHandler.class.getName(), new CustomCharacterEscapeHandler());
 
-        // маршаллинг объекта в файл
-        final XMLStreamWriter xmlStreamWriter =
-               // XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()),Charset.forName("windows-1251").toString());
-                XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()));
-        xmlStreamWriter.writeProcessingInstruction("xml", "version=\"1.0\" encoding=\"windows-1251\"");
-
-        //marshaller.marshal(f303, xmlFileOut.toFile());
-        marshaller.marshal(f303, xmlStreamWriter);
-        xmlStreamWriter.writeEndDocument();
+        // маршаллинг объекта в файл  ansi-1251
+//        final XMLStreamWriter xmlStreamWriter =
+//               XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()), "windows-1251");
+        // XMLOutputFactory.newInstance().createXMLStreamWriter(new FileOutputStream(xmlFileOut.toFile()));
+        //xmlStreamWriter.writeProcessingInstruction("xml", "version=\"1.0\" encoding=\"windows-1251\"");
+        //xmlStreamWriter.writeStartDocument("windows-1251", "1.0");
+        //xmlStreamWriter.
+        marshaller.marshal(f303, xmlFileOut.toFile());
+//        marshaller.marshal(f303, xmlStreamWriter);
+//        xmlStreamWriter.writeEndDocument();
     }
 }

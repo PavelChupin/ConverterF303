@@ -1,6 +1,5 @@
 package ru.ysolutions.converter.models.xls.f303;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -13,13 +12,13 @@ import java.math.BigDecimal;
 @ToString
 @Accessors(fluent = true)
 public class F303p10 {
-    protected String p106;
-    protected BigDecimal p107;
-    protected BigDecimal p108;
-    protected String p109;
-    protected String p110;
-    protected String p111;
-    protected String p112;
-    protected BigDecimal p113;
-    protected String p114;
+    private String p106;
+    private BigDecimal p107;
+    private BigDecimal p108;
+    private String p109;
+    private String p110;
+    private String p111;
+    private String p112;
+    private BigDecimal p113;
+    private String p114;
 }

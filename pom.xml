@@ -16,25 +16,17 @@
         <maven.compiler.source>17</maven.compiler.source><!-- версия исходников-->
         <maven.compiler.target>17</maven.compiler.target><!-- версия с которой можно запустить приложение-->
         <project.buid.sourceEncoding>UTF-8</project.buid.sourceEncoding>
-        <!--<jaxws-api.version>2.3.1</jaxws-api.version>
-        <com.sun.xml.ws.version>4.0.0</com.sun.xml.ws.version>-->
-        <!--<jaxb-api.version>2.3.1</jaxb-api.version>-->
-        <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
-        <!--<activation.version>1.1.1</activation.version>-->
+
         <log4j-core.version>2.20.0</log4j-core.version>
         <jakarta-xml-bind-api.version>4.0.0</jakarta-xml-bind-api.version>
         <poi-ooxml.version>5.2.3</poi-ooxml.version>
         <poi.version>5.2.3</poi.version>
         <lombok.version>1.18.26</lombok.version>
+        <jaxb-runtime.version>4.0.2</jaxb-runtime.version>
         <start-class>ru.ysolutions.converter.ConverterMain</start-class>
     </properties>
 
     <dependencies>
-        <!--<dependency>
-            <groupId>javax.xml.bind</groupId>
-            <artifactId>jaxb-api</artifactId>
-            <version>${jaxb-api.version}</version>
-        </dependency>-->
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
@@ -45,11 +37,6 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>${jaxb-runtime.version}</version>
         </dependency>
-        <!--<dependency>
-            <groupId>javax.activation</groupId>
-            <artifactId>activation</artifactId>
-            <version>${activation.version}</version>
-        </dependency>-->
 
         <!-- Excel start -->
         <dependency>

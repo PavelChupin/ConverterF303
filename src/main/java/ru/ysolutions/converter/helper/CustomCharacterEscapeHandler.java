@@ -45,5 +45,4 @@ public class CustomCharacterEscapeHandler implements CharacterEscapeHandler {
         if (start != limit)
             out.write(ch, start, limit - start);
     }
-}
-*/
+}*/
