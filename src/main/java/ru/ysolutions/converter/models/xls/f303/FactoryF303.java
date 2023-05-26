@@ -1,9 +1,13 @@
 package ru.ysolutions.converter.models.xls.f303;
 
+import org.apache.commons.collections4.CollectionUtils;
+import ru.ysolutions.converter.exception.AmountSourceException;
+import ru.ysolutions.converter.exception.ContractSourceException;
 import ru.ysolutions.converter.models.xml.*;
 
 import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,6 +50,7 @@ public class FactoryF303 {
                         .p46(c.getР3().getР312())
                         .p47(c.getР3().getР313Н())
                         .p48(c.getР3().getР314())
+                        .p49(getP49ByParam(c.getУсл()))
                         .conditionsCodes(getConditionCodesByParam(c.getУсл()))
                         .p52(c.getР3().getР317())
                         .p53(c.getР3().getР318())
@@ -99,6 +104,7 @@ public class FactoryF303 {
                         .p97(c.getР9() != null ? c.getР9().getР96() : null)
                         .p98(c.getР9() != null ? c.getР9().getР97() : null)
                         .p99(c.getР9() != null ? getLocalDateByXMLGregorianCalendar(c.getР9().getР98()) : null)
+                        .p101(getP101ByIst(c.getИст()))
                         .f303Repayments(getRepaymentsByParam(c.getПогшн()))
                         .f303RepaymentSources(getRepaymentSourcesByParam(c.getИст()))
                         .p104(c.getР9() != null ? c.getР9().getР913() : null)
@@ -116,37 +122,52 @@ public class FactoryF303 {
                 .contracts(f303Contracts);
     }
 
+    private static String getP49ByParam(List<Ф0409303Данные303ДоговорУсл> conditionCodesByParam) {
+        if (CollectionUtils.isEmpty(conditionCodesByParam)) {
+            return null;
+        } else {
+            return Arrays.toString(conditionCodesByParam.stream()
+                    .map(Ф0409303Данные303ДоговорУсл::getР315)
+                    .toArray())
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "");
+        }
+    }
+
+    private static String getP101ByIst(List<Ф0409303Данные303ДоговорИст> ist) {
+        if (CollectionUtils.isEmpty(ist)) {
+            return null;
+        } else {
+            return Arrays.toString(ist.stream()
+                    .map(Ф0409303Данные303ДоговорИст::getР910)
+                    .toArray())
+                    .replace("[", "")
+                    .replace("]", "")
+                    .replace(" ", "");
+        }
+    }
+
     private static List<F303RepaymentSource> getRepaymentSourcesByParam(List<Ф0409303Данные303ДоговорИст> repaymentSource) {
         return repaymentSource
                 .stream()
-                .map(r -> new F303RepaymentSource()
-                        .p101(r.getР910())
-                        .f303RepaymentSourceContracts(getRepaymentSourceContractsByParam(r.getИстДог()))
-                        .f303RepaymentSourceProperties(getRepaymentSourcePropertiesByParam(r.getИстСум()))
-                )
-                .collect(Collectors.toList());
-    }
-
-    private static List<F303RepaymentSourceProperties> getRepaymentSourcePropertiesByParam(List<Ф0409303Данные303ДоговорИстИстСум> repaymentSourceProperties) {
-        return repaymentSourceProperties
-                .stream()
-                .map(r -> new F303RepaymentSourceProperties()
-                        .p94(r.getР93())
-                        .p97(r.getР96())
-                        .p98(r.getР97())
-                        .p104(r.getР913())
-                        .p105(r.getР914())
-                )
-                .collect(Collectors.toList());
-
-    }
-
-    private static List<F303RepaymentSourceContract> getRepaymentSourceContractsByParam(List<Ф0409303Данные303ДоговорИстИстДог> repaymentSourceContract) {
-        return repaymentSourceContract
-                .stream()
-                .map(r -> new F303RepaymentSourceContract()
-                        .p102(r.getР911())
-                        .p103(r.getР912())
+                .map(r -> {
+                            if (CollectionUtils.isNotEmpty(r.getИстСум()) && r.getИстСум().size() > 1) {
+                                throw new AmountSourceException();
+                            } else if (CollectionUtils.isNotEmpty(r.getИстДог()) && r.getИстДог().size() > 1) {
+                                throw new ContractSourceException();
+                            } else {
+                                return new F303RepaymentSource()
+                                        .p94(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР93())
+                                        .p97(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР96())
+                                        .p98(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР97())
+                                        .p101(r.getР910())
+                                        .p102(CollectionUtils.isEmpty(r.getИстДог()) ? null : r.getИстДог().get(0).getР911())
+                                        .p103(CollectionUtils.isEmpty(r.getИстДог()) ? null : r.getИстДог().get(0).getР912())
+                                        .p104(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР913())
+                                        .p105(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР914());
+                            }
+                        }
                 )
                 .collect(Collectors.toList());
     }
@@ -200,6 +221,7 @@ public class FactoryF303 {
                         .p46(t.getР3Т() != null ? t.getР3Т().getР312() : null)
                         .p47(t.getР3Т() != null ? t.getР3Т().getР313Н() : null)
                         .p48(t.getР3Т() != null ? t.getР3Т().getР314() : null)
+                        .p49(getP49TrancheByParam(t.getУслТ()))
                         // 49/50/51
                         .conditionsCodes(getTranchegetConditionCodesByParam(t.getУслТ()))
                         .p52(t.getР3Т() != null ? t.getР3Т().getР317() : null)
@@ -247,6 +269,7 @@ public class FactoryF303 {
                         .p97(t.getР9Т() != null ? t.getР9Т().getР96() : null)
                         .p98(t.getР9Т() != null ? t.getР9Т().getР97() : null)
                         .p99(t.getР9Т() != null ? getLocalDateByXMLGregorianCalendar(t.getР9Т().getР98()) : null)
+                        .p101(getTrancheP101ByIst(t.getИстТ()))
                         .f303Repayments(getTrancheRepaymentsByParam(t.getПогшнТ()))
                         .f303RepaymentSources(getTrancheRepaymentSourcesByParam(t.getИстТ()))
                         .p104(t.getР9Т() != null ? t.getР9Т().getР913() : null)
@@ -255,36 +278,46 @@ public class FactoryF303 {
                 .collect(Collectors.toList());
     }
 
+    private static String getP49TrancheByParam(List<Ф0409303Данные303ДоговорТраншУслТ> услТ) {
+        if (CollectionUtils.isEmpty(услТ)) {
+            return null;
+        } else {
+            return Arrays.toString(услТ.stream()
+                    .map(Ф0409303Данные303ДоговорТраншУслТ::getР315)
+                    .toArray()).replace("[", "").replace("]", "");
+        }
+    }
+
+    private static String getTrancheP101ByIst(List<Ф0409303Данные303ДоговорТраншИстТ> ist) {
+        if (CollectionUtils.isEmpty(ist)) {
+            return null;
+        } else {
+            return Arrays.toString(ist.stream()
+                    .map(Ф0409303Данные303ДоговорТраншИстТ::getР910)
+                    .toArray()).replace("[", "").replace("]", "");
+        }
+    }
+
     private static List<F303RepaymentSource> getTrancheRepaymentSourcesByParam(List<Ф0409303Данные303ДоговорТраншИстТ> repaymentSource) {
         return repaymentSource
                 .stream()
-                .map(r -> new F303RepaymentSource()
-                        .p101(r.getР910())
-                        .f303RepaymentSourceContracts(getTrancheRepaymentSourceContractsByParam(r.getИстДог()))
-                        .f303RepaymentSourceProperties(getTrancheRepaymentSourcePropertiesByParam(r.getИстСум()))
-                )
-                .collect(Collectors.toList());
-    }
-
-    private static List<F303RepaymentSourceProperties> getTrancheRepaymentSourcePropertiesByParam(List<Ф0409303Данные303ДоговорТраншИстТИстСум> repaymentSourceProperties) {
-        return repaymentSourceProperties
-                .stream()
-                .map(r -> new F303RepaymentSourceProperties()
-                        .p94(r.getР93())
-                        .p97(r.getР96())
-                        .p98(r.getР97())
-                        .p104(r.getР913())
-                        .p105(r.getР914())
-                )
-                .collect(Collectors.toList());
-    }
-
-    private static List<F303RepaymentSourceContract> getTrancheRepaymentSourceContractsByParam(List<Ф0409303Данные303ДоговорТраншИстТИстДог> repaymentSourceContract) {
-        return repaymentSourceContract
-                .stream()
-                .map(r -> new F303RepaymentSourceContract()
-                        .p102(r.getР911())
-                        .p103(r.getР912())
+                .map(r -> {
+                            if (CollectionUtils.isNotEmpty(r.getИстСум()) && r.getИстСум().size() > 1) {
+                                throw new AmountSourceException();
+                            } else if (CollectionUtils.isNotEmpty(r.getИстДог()) && r.getИстДог().size() > 1) {
+                                throw new ContractSourceException();
+                            } else {
+                                return new F303RepaymentSource()
+                                        .p94(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР93())
+                                        .p97(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР96())
+                                        .p98(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР97())
+                                        .p101(r.getР910())
+                                        .p102(CollectionUtils.isEmpty(r.getИстДог()) ? null : r.getИстДог().get(0).getР911())
+                                        .p103(CollectionUtils.isEmpty(r.getИстДог()) ? null : r.getИстДог().get(0).getР912())
+                                        .p104(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР913())
+                                        .p105(CollectionUtils.isEmpty(r.getИстСум()) ? null : r.getИстСум().get(0).getР914());
+                            }
+                        }
                 )
                 .collect(Collectors.toList());
     }

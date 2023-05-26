@@ -1,5 +1,6 @@
 package ru.ysolutions.converter;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.ss.util.CellRangeAddress;
 import ru.ysolutions.converter.models.xls.ExcelHeader;
@@ -109,7 +110,7 @@ public class ConverterExcel {
         for (F303Contract f303Contract : f303Xls.contracts()) {
             maxContractRow++;
             startContractRow = maxContractRow;
-            int rowEnd;
+            //int rowEnd;
 
             Row row = sheet.createRow(startContractRow);
             // Нумерация начинается с нуля
@@ -145,10 +146,16 @@ public class ConverterExcel {
             // 10
             saveValueToCellString(row, 9, f303Contract.client_p1().p10(), this.stringStyle);
 
+            // 56/57/58/59/60/61
+            int rowEndWar = saveWarranty(startContractRow, maxContractRow, sheet, f303Contract.warranties());
+            if (maxContractRow < rowEndWar) {
+                maxContractRow = rowEndWar;
+            }
+
             // 11/12
-            rowEnd = saveClientGVZ(startContractRow, sheet, f303Contract.client_p1().clientGVZs());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndGvz = saveClientGVZ(rowEndWar, sheet, f303Contract.client_p1().clientGVZs());
+            if (maxContractRow < rowEndGvz) {
+                maxContractRow = rowEndGvz;
             }
             row = sheet.getRow(startContractRow);
 
@@ -192,9 +199,9 @@ public class ConverterExcel {
             saveValueToCellDate(row, 24, f303Contract.p25(), this.dateStyle);
 
             // 26/27/28/29/30/31/32
-            rowEnd = saveEncumbrance(startContractRow, sheet, f303Contract.encumbrances());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndEnc = saveEncumbrance(startContractRow, sheet, f303Contract.encumbrances());
+            if (maxContractRow < rowEndEnc) {
+                maxContractRow = rowEndEnc;
             }
             row = sheet.getRow(startContractRow);
 
@@ -246,10 +253,15 @@ public class ConverterExcel {
             // 48
             saveValueToCellString(row, 47, f303Contract.p48(), this.stringStyle);
 
+            // 49
+            saveValueToCellString(row, 48, f303Contract.p49(), this.stringStyle);
+
+            row = sheet.getRow(startContractRow);
+
             // 49/50/51
-            rowEnd = saveConditionsCode(startContractRow, sheet, f303Contract.conditionsCodes());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndCond = saveConditionsCode(rowEndGvz, startContractRow, sheet, f303Contract.conditionsCodes());
+            if (maxContractRow < rowEndCond) {
+                maxContractRow = rowEndCond;
             }
             row = sheet.getRow(startContractRow);
 
@@ -264,13 +276,6 @@ public class ConverterExcel {
 
             // 55
             saveValueToCellBigDecimal(row, 54, f303Contract.p55(), this.stringStyle);
-
-            // 56/57/58/59/60/61
-            rowEnd = saveWarranty(startContractRow, sheet, f303Contract.warranties());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
-            }
-            row = sheet.getRow(startContractRow);
 
             // 62
             saveValueToCellDate(row, 61, f303Contract.p62(), this.dateStyle);
@@ -351,23 +356,22 @@ public class ConverterExcel {
             // 99
             saveValueToCellDate(row, 98, f303Contract.p99(), this.dateStyle);
 
-            // 99/100
-            rowEnd = saveRepayments(startContractRow, sheet, f303Contract.f303Repayments());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
-            }
-            row = sheet.getRow(startContractRow);
-
-            // 100
             // 101
-            rowEnd = saveRepaymentSources(startContractRow, sheet, f303Contract.f303RepaymentSources());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            saveValueToCellString(row, 100, f303Contract.p101(), this.stringStyle);
+
+            // 99/100
+            int rowEndRepaym = saveRepayments(startContractRow, sheet, f303Contract.f303Repayments());
+            if (maxContractRow < rowEndRepaym) {
+                maxContractRow = rowEndRepaym;
             }
             row = sheet.getRow(startContractRow);
 
-            // 102
-            // 103
+            //p94/p97/p98/p101/102/103/104/105
+            int rowEndRepaymSource = saveRepaymentSources(startContractRow, rowEndRepaym, sheet, f303Contract.f303RepaymentSources());
+            if (maxContractRow < rowEndRepaymSource) {
+                maxContractRow = rowEndRepaymSource;
+            }
+            row = sheet.getRow(startContractRow);
 
             // 104
             saveValueToCellString(row, 103, f303Contract.p104(), this.stringStyle);
@@ -375,21 +379,19 @@ public class ConverterExcel {
             saveValueToCellString(row, 104, f303Contract.p105(), this.stringStyle);
 
             // 106/107/108/109/110/111/112/113/114
-            rowEnd = saveP10(startContractRow, sheet, f303Contract.p10());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndP10 = saveP10(startContractRow, sheet, f303Contract.p10());
+            if (maxContractRow < rowEndP10) {
+                maxContractRow = rowEndP10;
             }
             row = sheet.getRow(startContractRow);
 
 
             // Транши
-            rowEnd = saveTranches(maxContractRow, sheet, f303Contract.tranches(), f303Contract.p13());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndTran = saveTranches(maxContractRow, sheet, f303Contract.tranches(), f303Contract.p13());
+            if (maxContractRow < rowEndTran) {
+                maxContractRow = rowEndTran;
             }
             row = sheet.getRow(startContractRow);
-
-
         }
 
         // Автоподбор ширины для столбца
@@ -420,23 +422,60 @@ public class ConverterExcel {
     }
 
     //p94/p97/p98/p101/102/103/104/105
-    private int saveRepaymentSources(int startContractRow, Sheet sheet, List<F303RepaymentSource> f303RepaymentSources) {
-        int number = startContractRow - 1;
+    private int saveRepaymentSources(int startContractRow, int startRow, Sheet sheet, List<F303RepaymentSource> f303RepaymentSources) {
+        int number = startRow;
         for (F303RepaymentSource f303RepaymentSource : f303RepaymentSources) {
-            number++;
-            Row rowNumber = sheet.getRow(number);
-            if (rowNumber == null) {
-                rowNumber = sheet.createRow(number);
+            Row rowNumber = null;
+
+            if (f303RepaymentSources.size() == 1
+                    && f303RepaymentSource.p94() == null
+                    && f303RepaymentSource.p97() == null
+                    && f303RepaymentSource.p98() == null
+                    //&& f303RepaymentSource.p101() == null
+                    && f303RepaymentSource.p102() == null
+                    && f303RepaymentSource.p103() == null
+                    && f303RepaymentSource.p104() == null
+                    && f303RepaymentSource.p105() == null
+            ) {
+                rowNumber = sheet.getRow(startContractRow);
+            } else {
+                number++;
+                rowNumber = sheet.getRow(number);
+                if (rowNumber == null) {
+                    rowNumber = sheet.createRow(number);
+                }
             }
+
+            //94
+            saveValueToCellBigDecimal(rowNumber, 93, f303RepaymentSource.p94(), this.moneyStyle);
+
+            //97
+            saveValueToCellBigDecimal(rowNumber, 96, f303RepaymentSource.p97(), this.moneyStyle);
+
+            //98
+            saveValueToCellBigDecimal(rowNumber, 97, f303RepaymentSource.p98(), this.moneyStyle);
+
             // 101
             saveValueToCellString(rowNumber, 100, f303RepaymentSource.p101(), this.stringStyle);
+
+            //102
+            saveValueToCellString(rowNumber, 101, f303RepaymentSource.p102(), this.stringStyle);
+
+            //103
+            saveValueToCellString(rowNumber, 102, f303RepaymentSource.p103(), this.stringStyle);
+
+            //104
+            saveValueToCellString(rowNumber, 103, f303RepaymentSource.p104(), this.stringStyle);
+
+            //105
+            saveValueToCellString(rowNumber, 104, f303RepaymentSource.p105(), this.stringStyle);
         }
         return number;
     }
 
     // 99/100
-    private int saveRepayments(int startContractRow, Sheet sheet, List<F303Repayment> f303Repayments) {
-        int endRow = startContractRow;
+    private int saveRepayments(int startRow, Sheet sheet, List<F303Repayment> f303Repayments) {
+        int endRow = startRow;
         for (F303Repayment repayment : f303Repayments) {
             endRow++;
 
@@ -457,7 +496,7 @@ public class ConverterExcel {
         int startRowNumberTranche;
         int maxRowNumberTranche = maxContractRow;
         for (F303Tranche tranche : tranches) {
-            int rowEnd;
+            //int rowEnd;
             maxRowNumberTranche++;
             startRowNumberTranche = maxRowNumberTranche;
 
@@ -503,13 +542,22 @@ public class ConverterExcel {
             // 48
             saveValueToCellString(rowNumber, 47, tranche.p48(), this.stringStyle);
 
-            // 49/50/51
-            rowEnd = saveConditionsCode(startRowNumberTranche, sheet, tranche.conditionsCodes());
-            if (maxRowNumberTranche < rowEnd) {
-                maxRowNumberTranche = rowEnd;
+            // 49
+            saveValueToCellString(rowNumber, 48, tranche.p49(), this.stringStyle);
+
+            // p4
+            int rowEndWar = saveWarranty(startRowNumberTranche, maxRowNumberTranche, sheet, tranche.warranties());
+            if (maxRowNumberTranche < rowEndWar) {
+                maxRowNumberTranche = rowEndWar;
             }
             rowNumber = sheet.getRow(startRowNumberTranche);
 
+            // 49/50/51
+            int rowEndCond = saveConditionsCode(rowEndWar, startRowNumberTranche, sheet, tranche.conditionsCodes());
+            if (maxRowNumberTranche < rowEndCond) {
+                maxRowNumberTranche = rowEndCond;
+            }
+            rowNumber = sheet.getRow(startRowNumberTranche);
 
             // 52
             saveValueToCellString(rowNumber, 51, tranche.p52(), this.stringStyle);
@@ -519,13 +567,6 @@ public class ConverterExcel {
             saveValueToCellBigDecimal(rowNumber, 53, tranche.p54(), this.stringStyle);
             //55
             saveValueToCellBigDecimal(rowNumber, 54, tranche.p55(), this.stringStyle);
-
-            // p4
-            rowEnd = saveWarranty(startRowNumberTranche, sheet, tranche.warranties());
-            if (maxRowNumberTranche < rowEnd) {
-                maxRowNumberTranche = rowEnd;
-            }
-            rowNumber = sheet.getRow(startRowNumberTranche);
 
             // p5
             // 62
@@ -602,22 +643,22 @@ public class ConverterExcel {
             // 99
             saveValueToCellDate(rowNumber, 98, tranche.p99(), this.dateStyle);
 
+            // 101
+            saveValueToCellString(rowNumber, 100, tranche.p101(), this.stringStyle);
+
             // 99/100
-            rowEnd = saveRepayments(startRowNumberTranche, sheet, tranche.f303Repayments());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            int rowEndRepaym = saveRepayments(startRowNumberTranche, sheet, tranche.f303Repayments());
+            if (maxRowNumberTranche < rowEndRepaym) {
+                maxRowNumberTranche = rowEndRepaym;
             }
             rowNumber = sheet.getRow(startRowNumberTranche);
 
-            // 100
-            // 101
-            rowEnd = saveRepaymentSources(startRowNumberTranche, sheet, tranche.f303RepaymentSources());
-            if (maxContractRow < rowEnd) {
-                maxContractRow = rowEnd;
+            //p94/p97/p98/p101/102/103/104/105
+            int rowEndRepaymenSource = saveRepaymentSources(startRowNumberTranche, rowEndRepaym, sheet, tranche.f303RepaymentSources());
+            if (maxRowNumberTranche < rowEndRepaymenSource) {
+                maxRowNumberTranche = rowEndRepaymenSource;
             }
             rowNumber = sheet.getRow(startRowNumberTranche);
-            // 102
-            // 103
 
             // 104
             saveValueToCellString(rowNumber, 103, tranche.p104(), this.stringStyle);
@@ -659,13 +700,18 @@ public class ConverterExcel {
     }
 
     // 56/57/58/59/60/61
-    private int saveWarranty(int startContractRow, Sheet sheet, List<F303Warranty> warranties) {
-        int number = startContractRow;
+    private int saveWarranty(int startContractRow, int startRow, Sheet sheet, List<F303Warranty> warranties) {
+        int number = startRow;
         for (F303Warranty warranty : warranties) {
-            number++;
-            Row rowNumber = sheet.getRow(number);
-            if (rowNumber == null) {
-                rowNumber = sheet.createRow(number);
+            Row rowNumber = null;
+            if ("0".equals(warranty.p56())) {
+                rowNumber = sheet.getRow(startContractRow);
+            } else {
+                number++;
+                rowNumber = sheet.getRow(number);
+                if (rowNumber == null) {
+                    rowNumber = sheet.createRow(number);
+                }
             }
             // 56
             saveValueToCellString(rowNumber, 55, warranty.p56(), this.stringStyle);
@@ -680,22 +726,54 @@ public class ConverterExcel {
             // 61
             saveValueToCellBigDecimal(rowNumber, 60, warranty.p61(), this.moneyStyle);
         }
+
         return number;
     }
 
     // Поля 49 50 51
-    private int saveConditionsCode(int startContractRow, Sheet sheet, List<F303SpecialCondition> f303SpecialConditions) {
-        int number = startContractRow - 1;
+    private int saveConditionsCode(int rowEndWar, int startRow, Sheet sheet, List<F303SpecialCondition> f303SpecialConditions) {
+        int number = rowEndWar;
         for (F303SpecialCondition f303SpecialCondition : f303SpecialConditions) {
-            number++;
-            Row rowNumber = sheet.getRow(number);
-            if (rowNumber == null) {
-                rowNumber = sheet.createRow(number);
+            Row rowNumber = null;
+            if (f303SpecialConditions.size() == 1
+                    && (CollectionUtils.isEmpty(f303SpecialCondition.conditionsCodeConds())
+                    || "ЛД".equalsIgnoreCase(f303SpecialConditions.get(0).p49())
+                    || "ЛЗ".equalsIgnoreCase(f303SpecialConditions.get(0).p49()))
+            ) {
+                rowNumber = sheet.getRow(startRow);
+
+                if ("ЛД".equalsIgnoreCase(f303SpecialConditions.get(0).p49())
+                        || "ЛЗ".equalsIgnoreCase(f303SpecialConditions.get(0).p49())) {
+                    // 50
+                    saveValueToCellString(rowNumber, 49, f303SpecialConditions.get(0).conditionsCodeConds().get(0).p50(), this.stringStyle);
+                    // 51
+                    saveValueToCellString(rowNumber, 50, f303SpecialConditions.get(0).conditionsCodeConds().get(0).p51(), this.stringStyle);
+
+                    f303SpecialConditions.get(0).conditionsCodeConds().remove(0);
+                    if (number <= rowEndWar) {
+                        if (CollectionUtils.isNotEmpty(f303SpecialConditions.get(0).conditionsCodeConds())) {
+                            number = rowEndWar + 1;
+                        } else {
+                            number = rowEndWar;
+                        }
+                    }
+                }
+            } else {
+                number++;
+
+                rowNumber = sheet.getRow(number);
+                if (rowNumber == null) {
+                    rowNumber = sheet.createRow(number);
+                }
             }
+
             // 49
-            saveValueToCellString(rowNumber, 48, f303SpecialCondition.p49(), this.stringStyle);
-            // 50/51
-            int maxContractRow = saveConditionsCodeCond(number, sheet, f303SpecialCondition.conditionsCodeConds());
+            if (CollectionUtils.isEmpty(f303SpecialCondition.conditionsCodeConds())) {
+                saveValueToCellString(rowNumber, 48, f303SpecialCondition.p49(), this.stringStyle);
+            }
+
+            // 49/50/51
+            int maxContractRow = saveConditionsCodeCond(f303SpecialCondition.p49(), number, sheet, f303SpecialCondition.conditionsCodeConds());
             if (number < maxContractRow) {
                 number = maxContractRow;
             }
@@ -703,15 +781,17 @@ public class ConverterExcel {
         return number;
     }
 
-    // Поля 50 51
-    private int saveConditionsCodeCond(int startContractRow, Sheet sheet, List<F303SpecialConditionProperty> f303SpecialConditionProperties) {
-        int number = startContractRow - 1;
+    // Поля 49 50 51
+    private int saveConditionsCodeCond(String p49, int startRow, Sheet sheet, List<F303SpecialConditionProperty> f303SpecialConditionProperties) {
+        int number = startRow - 1;
         for (F303SpecialConditionProperty f303SpecialConditionProperty : f303SpecialConditionProperties) {
             number++;
             Row rowNumber = sheet.getRow(number);
             if (rowNumber == null) {
                 rowNumber = sheet.createRow(number);
             }
+            // 49
+            saveValueToCellString(rowNumber, 48, p49, this.stringStyle);
             // 50
             saveValueToCellString(rowNumber, 49, f303SpecialConditionProperty.p50(), this.stringStyle);
             // 51
@@ -722,8 +802,8 @@ public class ConverterExcel {
     }
 
     // 26/27/28/29/30/31/32
-    private int saveEncumbrance(int startContractRow, Sheet sheet, List<F303Encumbrance> encumbrances) {
-        int number = startContractRow - 1;
+    private int saveEncumbrance(int startRow, Sheet sheet, List<F303Encumbrance> encumbrances) {
+        int number = startRow - 1;
         for (F303Encumbrance f303Encumbrance : encumbrances) {
             number++;
             Row rowNumber = sheet.getRow(number);
@@ -749,8 +829,8 @@ public class ConverterExcel {
     }
 
     // Поля 11 и 12
-    private int saveClientGVZ(int startContractRow, Sheet sheet, List<F303ClientGVZ> f303ClientGVZS) {
-        int number = startContractRow - 1;
+    private int saveClientGVZ(int startRow, Sheet sheet, List<F303ClientGVZ> f303ClientGVZS) {
+        int number = startRow;
         for (F303ClientGVZ f303ClientGVZ : f303ClientGVZS) {
             number++;
             Row rowNumber = sheet.getRow(number);

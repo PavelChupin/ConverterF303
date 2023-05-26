@@ -1,10 +1,12 @@
 package ru.ysolutions.converter.models.xls.f303;
 
+import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @NoArgsConstructor
@@ -12,13 +14,12 @@ import java.util.List;
 @ToString
 @Accessors(fluent = true)
 public class F303RepaymentSource {
-    //@XmlAttribute(name = "\u04209_10", required = true)
+    private BigDecimal p94;
+    private BigDecimal p97;
+    private BigDecimal p98;
     private String p101;
-
-    //p102/p103
-    private List<F303RepaymentSourceContract> f303RepaymentSourceContracts;
-
-    //p94/p97/p98/p104/p105
-    private List<F303RepaymentSourceProperties> f303RepaymentSourceProperties;
-
+    private String p102;
+    private String p103;
+    private String p104;
+    private String p105;
 }

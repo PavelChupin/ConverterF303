@@ -162,22 +162,22 @@ public class FactoryF303Xml {
 
     private static Ф0409303Данные303ДоговорИст getRepaymentSource(F303RepaymentSource f303RepaymentSource) {
         final Ф0409303Данные303ДоговорИст rp = new Ф0409303Данные303ДоговорИст();
-        rp.setР910(f303RepaymentSource.p101());
-        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceProperties())) {
-            rp.getИстСум().addAll(f303RepaymentSource.f303RepaymentSourceProperties()
-                    .stream()
-                    .map(FactoryF303Xml::getRepaymentSourceProperties)
-                    .collect(Collectors.toList())
-
-            );
-        }
-        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceContracts())) {
-            rp.getИстДог().addAll(f303RepaymentSource.f303RepaymentSourceContracts()
-                    .stream()
-                    .map(FactoryF303Xml::getRepaymentSourceContracts)
-                    .collect(Collectors.toList())
-            );
-        }
+//        rp.setР910(f303RepaymentSource.p101());
+//        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceProperties())) {
+//            rp.getИстСум().addAll(f303RepaymentSource.f303RepaymentSourceProperties()
+//                    .stream()
+//                    .map(FactoryF303Xml::getRepaymentSourceProperties)
+//                    .collect(Collectors.toList())
+//
+//            );
+//        }
+//        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceContracts())) {
+//            rp.getИстДог().addAll(f303RepaymentSource.f303RepaymentSourceContracts()
+//                    .stream()
+//                    .map(FactoryF303Xml::getRepaymentSourceContracts)
+//                    .collect(Collectors.toList())
+//            );
+//        }
 
         return rp;
     }

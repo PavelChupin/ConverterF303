@@ -33,6 +33,7 @@ public class F303Tranche {
     private BigDecimal p46;
     private BigInteger p47;
     private String p48;
+    private String p49;
     // 49/50/51
     private List<F303SpecialCondition> conditionsCodes;
     private String p52;
@@ -79,10 +80,14 @@ public class F303Tranche {
     private BigDecimal p97;
     private BigDecimal p98;
     private LocalDate p99;
+    private String p101;
+
     //p99/p100
     private List<F303Repayment> f303Repayments;
+
     //p94/p97/p98/p101/102/103/104/105
     private List<F303RepaymentSource> f303RepaymentSources;
+
     private String p104;
     private String p105;
 }
