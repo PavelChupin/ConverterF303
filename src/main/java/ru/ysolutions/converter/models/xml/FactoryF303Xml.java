@@ -26,7 +26,7 @@ public class FactoryF303Xml {
         f303.setПериодичность(ТипПериодаТип.МЕСЯЧНАЯ);
         f303.setКодФормы("0409303");
         /* задать вопрос как формировать*/
-        f303.setУникИдОЭС("4FE94FDB-8C5D-4DE0-9AAC-886AB3789267");
+        f303.setУникИдОЭС("986FBCCE-A26E-4D0D-8460-55B53FE24D6E");
         /* всегда ли константа */
         f303.setВидОЭС(ВидОЭСтип.ОТЧЕТНОСТЬ_КО);
         f303.setОКУД("0409303");
@@ -38,7 +38,7 @@ public class FactoryF303Xml {
         creator.setВидОрг(ВидОргТип.КО);
         creator.setОКАТО("45286596");
         creator.setОКПО("17541272");
-        creator.setАдрес("119180, г. Москва, ул. Полянка Большая, д. 50/1, стр. 1.");
+        creator.setАдрес("РОССИЯ, 119180, Москва г, Полянка Б. ул, 50/1 стр. 1");
         creator.setСокрНаимен("АО АКБ \"НОВИКОМБАНК\"");
         creator.setБИК("044525162");
         creator.setКодТУ("45");
@@ -46,20 +46,20 @@ public class FactoryF303Xml {
 
         final Ф0409303СоставительГлавБух buh = new Ф0409303СоставительГлавБух();
         buh.setДолжность("Главный бухгалтер");
-        buh.setФИО("Петров П.П.");
+        buh.setФИО("Литвинцева Н.А.");
         creator.setГлавБух(buh);
 
         final Ф0409303СоставительРуководитель manager = new Ф0409303СоставительРуководитель();
         manager.setДолжность("Первый заместитель Председателя Правления");
-        manager.setФИО("Иванов И.И.");
+        manager.setФИО("Урсуляк Д.В.");
         creator.setРуководитель(manager);
 
         final Ф0409303СоставительИсполнитель executor = new Ф0409303СоставительИсполнитель();
         executor.setДолжность("Главный специалист");
-        executor.setФИО("Сидоров С.С.");
-        executor.setТелефон("+7(495)111-1111, доб.111");
-        executor.setФакс("");
-        executor.setЭлПочта("");
+        executor.setФИО("Травкина В.И.");
+        executor.setТелефон("+7(495)974-7187, доб.137");
+        //executor.setФакс("");
+        //executor.setЭлПочта("");
         creator.setИсполнитель(executor);
 
         f303.setСоставитель(creator);
@@ -157,27 +157,224 @@ public class FactoryF303Xml {
                     .collect(Collectors.toList())
             );
         }
+
+        // Part tranches
+        if (CollectionUtils.isNotEmpty(contractParam.tranches())) {
+            contract.getТранш().addAll(contractParam.tranches()
+                    .stream()
+                    .map(FactoryF303Xml::getTranchesByParam)
+                    .collect(Collectors.toList())
+            );
+        }
+
         return contract;
+    }
+
+    private static Ф0409303Данные303ДоговорТранш getTranchesByParam(F303Tranche f303Tranche) {
+        final Ф0409303Данные303ДоговорТранш tr = new Ф0409303Данные303ДоговорТранш();
+
+        tr.setР52(f303Tranche.p63());
+
+        //p2
+        final Ф0409303Данные303ДоговорТраншР2Т p2 = new Ф0409303Данные303ДоговорТраншР2Т();
+        p2.setР210(f303Tranche.p22());
+        p2.setР213Н(getXmlGregorianCalendarByLocalDate(f303Tranche.p25()));
+        p2.setР221(f303Tranche.p33());
+        tr.setР2Т(p2);
+
+        //p3
+        final Ф0409303Данные303ДоговорТраншР3Т p3 = new Ф0409303Данные303ДоговорТраншР3Т();
+        p3.setР32(f303Tranche.p36());
+        p3.setР33(f303Tranche.p37());
+        p3.setР34(f303Tranche.p38());
+        p3.setР35(f303Tranche.p39());
+        p3.setР36(f303Tranche.p40());
+        p3.setР37(getXmlGregorianCalendarByLocalDate(f303Tranche.p41()));
+        p3.setР38(getXmlGregorianCalendarByLocalDate(f303Tranche.p42()));
+        p3.setР39(f303Tranche.p43());
+        p3.setР310(f303Tranche.p44());
+        p3.setР311(f303Tranche.p45());
+        p3.setР312(f303Tranche.p46());
+        p3.setР313Н(f303Tranche.p47());
+        p3.setР314(f303Tranche.p48());
+        if (CollectionUtils.isNotEmpty(f303Tranche.conditionsCodes())) {
+            tr.getУслТ().addAll(f303Tranche.conditionsCodes()
+                    .stream()
+                    .map(FactoryF303Xml::getConditionsCodesTrncheByParam)
+                    .collect(Collectors.toList())
+            );
+        }
+        p3.setР317(f303Tranche.p52());
+        p3.setР318(f303Tranche.p53());
+        p3.setР319(f303Tranche.p54());
+        p3.setР320(f303Tranche.p55());
+        tr.setР3Т(p3);
+
+        //p4
+        if (CollectionUtils.isNotEmpty(f303Tranche.warranties())) {
+            tr.getР4ОбеспТ().addAll(f303Tranche.warranties()
+                    .stream()
+                    .map(FactoryF303Xml::getWarrantyTranshe)
+                    .collect(Collectors.toList())
+            );
+        }
+
+        //p5
+        final Ф0409303Данные303ДоговорТраншР5Т p5 = new Ф0409303Данные303ДоговорТраншР5Т();
+        p5.setР51(getXmlGregorianCalendarByLocalDate(f303Tranche.p62()));
+        p5.setР53(f303Tranche.p64());
+        p5.setР54(f303Tranche.p65());
+        p5.setР55(f303Tranche.p66());
+        p5.setР56(f303Tranche.p67());
+        p5.setР57(f303Tranche.p68());
+        p5.setР58(f303Tranche.p69());
+        p5.setР59(f303Tranche.p70());
+        tr.setР5Т(p5);
+
+        final Ф0409303Данные303ДоговорТраншР6Т p6 = new Ф0409303Данные303ДоговорТраншР6Т();
+        p6.setР61(f303Tranche.p71());
+        p6.setР62(f303Tranche.p72());
+        p6.setР63(f303Tranche.p73());
+        p6.setР64(f303Tranche.p74());
+        p6.setР65(f303Tranche.p75());
+        p6.setР66(f303Tranche.p76());
+        p6.setР67(f303Tranche.p77());
+        p6.setР68(f303Tranche.p78());
+        p6.setР69(f303Tranche.p79());
+        p6.setР610(f303Tranche.p80());
+
+        p6.setР612(f303Tranche.p82());
+        p6.setР613(f303Tranche.p83());
+        p6.setР614(f303Tranche.p84());
+        tr.setР6Т(p6);
+
+        final Ф0409303Данные303ДоговорТраншР7Т p7 = new Ф0409303Данные303ДоговорТраншР7Т();
+        p7.setР71(f303Tranche.p85());
+        p7.setР72(f303Tranche.p86());
+        p7.setР73Н(f303Tranche.p87());
+        tr.setР7Т(p7);
+
+        final Ф0409303Данные303ДоговорТраншР9Т p9 = new Ф0409303Данные303ДоговорТраншР9Т();
+        p9.setР91(f303Tranche.p92());
+        p9.setР92(f303Tranche.p93());
+        p9.setР93(f303Tranche.p94());
+        p9.setР94(f303Tranche.p95());
+        p9.setР95(f303Tranche.p96());
+        p9.setР96(f303Tranche.p97());
+        p9.setР97(f303Tranche.p98());
+        p9.setР98(getXmlGregorianCalendarByLocalDate(f303Tranche.p99()));
+        p9.setР913(f303Tranche.p104());
+        p9.setР914(f303Tranche.p105());
+        tr.setР9Т(p9);
+
+        if (CollectionUtils.isNotEmpty(f303Tranche.f303Repayments())) {
+            tr.getПогшнТ().addAll(
+                    f303Tranche.f303Repayments()
+                            .stream()
+                            .map(r -> {
+                                final Ф0409303Данные303ДоговорТраншПогшнТ p = new Ф0409303Данные303ДоговорТраншПогшнТ();
+                                p.setР98(getXmlGregorianCalendarByLocalDate(r.p99()));
+                                p.setР99(getXmlGregorianCalendarByLocalDate(r.p100()));
+                                return p;
+                            })
+                            .collect(Collectors.toList())
+            );
+        }
+
+        if (CollectionUtils.isNotEmpty(f303Tranche.f303RepaymentSources())) {
+            tr.getИстТ().addAll(f303Tranche.f303RepaymentSources()
+                    .stream()
+                    .map(FactoryF303Xml::getRepaymentSourceTranche)
+                    .collect(Collectors.toList())
+            );
+        }
+
+        return tr;
+    }
+
+    private static Ф0409303Данные303ДоговорТраншИстТ getRepaymentSourceTranche(F303RepaymentSource f303RepaymentSource) {
+        final Ф0409303Данные303ДоговорТраншИстТ rp = new Ф0409303Данные303ДоговорТраншИстТ();
+        rp.setР910(f303RepaymentSource.p101());
+
+        if (f303RepaymentSource.p102() != null || f303RepaymentSource.p103() != null) {
+            final Ф0409303Данные303ДоговорТраншИстТИстДог dog = new Ф0409303Данные303ДоговорТраншИстТИстДог();
+            dog.setР911(f303RepaymentSource.p102());
+            dog.setР912(f303RepaymentSource.p103());
+            rp.getИстДог().add(dog);
+        }
+
+        if (f303RepaymentSource.p94() != null
+                || f303RepaymentSource.p97() != null
+                || f303RepaymentSource.p98() != null
+                || f303RepaymentSource.p104() != null
+                || f303RepaymentSource.p105() != null) {
+            final Ф0409303Данные303ДоговорТраншИстТИстСум sum = new Ф0409303Данные303ДоговорТраншИстТИстСум();
+            sum.setР93(f303RepaymentSource.p94());
+            sum.setР96(f303RepaymentSource.p97());
+            sum.setР97(f303RepaymentSource.p98());
+            sum.setР913(f303RepaymentSource.p104());
+            sum.setР914(f303RepaymentSource.p105());
+            rp.getИстСум().add(sum);
+        }
+
+        return rp;
+    }
+
+    private static Ф0409303Данные303ДоговорТраншР4ОбеспТ getWarrantyTranshe(F303Warranty warranty) {
+        final Ф0409303Данные303ДоговорТраншР4ОбеспТ cover = new Ф0409303Данные303ДоговорТраншР4ОбеспТ();
+        cover.setР41(warranty.p56());
+        cover.setР42(warranty.p57());
+        cover.setР43(getXmlGregorianCalendarByLocalDate(warranty.p58()));
+        cover.setР44(warranty.p59());
+        cover.setР45Н(warranty.p60());
+        cover.setР46Н(warranty.p61());
+        return cover;
+    }
+
+    private static Ф0409303Данные303ДоговорТраншУслТ getConditionsCodesTrncheByParam(F303SpecialCondition f303SpecialCondition) {
+        final Ф0409303Данные303ДоговорТраншУслТ condition = new Ф0409303Данные303ДоговорТраншУслТ();
+        condition.setР315(f303SpecialCondition.p49());
+        if (CollectionUtils.isNotEmpty(f303SpecialCondition.conditionsCodeConds())) {
+            condition.getДогПоУсл().addAll(f303SpecialCondition.conditionsCodeConds()
+                    .stream()
+                    .map(FactoryF303Xml::getConditionsCodesCondTrancheByParam)
+                    .collect(Collectors.toList())
+            );
+        }
+
+        return condition;
+    }
+
+    private static Ф0409303Данные303ДоговорТраншУслТДогПоУсл getConditionsCodesCondTrancheByParam(F303SpecialConditionProperty f303SpecialConditionProperty) {
+        final Ф0409303Данные303ДоговорТраншУслТДогПоУсл cond = new Ф0409303Данные303ДоговорТраншУслТДогПоУсл();
+        cond.setР316(f303SpecialConditionProperty.p50());
+        cond.setР316Рг(f303SpecialConditionProperty.p51());
+        return cond;
     }
 
     private static Ф0409303Данные303ДоговорИст getRepaymentSource(F303RepaymentSource f303RepaymentSource) {
         final Ф0409303Данные303ДоговорИст rp = new Ф0409303Данные303ДоговорИст();
-//        rp.setР910(f303RepaymentSource.p101());
-//        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceProperties())) {
-//            rp.getИстСум().addAll(f303RepaymentSource.f303RepaymentSourceProperties()
-//                    .stream()
-//                    .map(FactoryF303Xml::getRepaymentSourceProperties)
-//                    .collect(Collectors.toList())
-//
-//            );
-//        }
-//        if (CollectionUtils.isNotEmpty(f303RepaymentSource.f303RepaymentSourceContracts())) {
-//            rp.getИстДог().addAll(f303RepaymentSource.f303RepaymentSourceContracts()
-//                    .stream()
-//                    .map(FactoryF303Xml::getRepaymentSourceContracts)
-//                    .collect(Collectors.toList())
-//            );
-//        }
+        rp.setР910(f303RepaymentSource.p101());
+        if (f303RepaymentSource.p102() != null || f303RepaymentSource.p103() != null) {
+            final Ф0409303Данные303ДоговорИстИстДог dog = new Ф0409303Данные303ДоговорИстИстДог();
+            dog.setР911(f303RepaymentSource.p102());
+            dog.setР912(f303RepaymentSource.p103());
+            rp.getИстДог().add(dog);
+        }
+
+        if (f303RepaymentSource.p94() != null
+                || f303RepaymentSource.p97() != null
+                || f303RepaymentSource.p98() != null
+                || f303RepaymentSource.p104() != null
+                || f303RepaymentSource.p105() != null) {
+            final Ф0409303Данные303ДоговорИстИстСум sum = new Ф0409303Данные303ДоговорИстИстСум();
+            sum.setР93(f303RepaymentSource.p94());
+            sum.setР96(f303RepaymentSource.p97());
+            sum.setР97(f303RepaymentSource.p98());
+            sum.setР913(f303RepaymentSource.p104());
+            sum.setР914(f303RepaymentSource.p105());
+            rp.getИстСум().add(sum);
+        }
 
         return rp;
     }
@@ -186,7 +383,6 @@ public class FactoryF303Xml {
         final Ф0409303Данные303ДоговорИстИстДог c = new Ф0409303Данные303ДоговорИстИстДог();
         c.setР911(f303RepaymentSourceContract.p102());
         c.setР912(f303RepaymentSourceContract.p103());
-
         return c;
     }
 
@@ -437,24 +633,4 @@ public class FactoryF303Xml {
             throw new RuntimeException(e);
         }
     }
-
-    /*
-    @XmlElement(name = "\u0414\u0430\u043d\u043d\u044b\u0435303")
-    protected Ф0409303Данные303 данные303;
-
-    @XmlElement(name = "\u041d\u0435\u0442\u0414\u0430\u043d\u043d\u044b\u0445")
-    protected Ф0409303НетДанных нетДанных;
-
-    @XmlElement(name = "\u041f\u043e\u044f\u0441\u043d\u0435\u043d\u0438\u0435")
-    protected Ф0409303Пояснение пояснение;
-
-    @XmlElement(name = "\u041f\u0440\u043e\u0442\u043e\u043a\u043e\u043b\u041a\u043e\u043d\u0442\u0440\u043e\u043b\u044f")
-    protected Ф0409303ПротоколКонтроля протоколКонтроля;
-
-    @XmlElement(name = "\u041f\u043e\u044f\u0441\u043d\u0435\u043d\u0438\u0435\u041e\u0448\u0438\u0431\u043e\u043a")
-    protected Ф0409303ПояснениеОшибок пояснениеОшибок;
-
-    @XmlElement(name = "\u0418\u043d\u0444\u041f\u041a")
-    protected Ф0409303ИнфПК инфПК;
-    */
 }

@@ -3,15 +3,18 @@ package ru.ysolutions.converter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import ru.ysolutions.converter.data.ConditionBoard;
+import ru.ysolutions.converter.data.Condition;
 import ru.ysolutions.converter.data.ContractBoard;
+import ru.ysolutions.converter.data.Repayment;
 import ru.ysolutions.converter.models.xls.f303.*;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class ConverterXml {
@@ -122,14 +125,180 @@ public class ConverterXml {
                         .p91(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 90))
 
                         // P9
+                        // p9
+                        .p92(getStringValue(sheet.getRow(cb.startNumRow()), 91))
+                        .p93(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 92))
+                        .p94(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 93))
+                        .p95(getStringValue(sheet.getRow(cb.startNumRow()), 94))
+                        .p96(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 95))
+                        .p97(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 96))
+                        .p98(getBigDecimalValue(sheet.getRow(cb.startNumRow()), 97))
+                        .p99(getLocalDateValue(sheet.getRow(cb.startNumRow()), 98))
+                        .p101(getStringValue(sheet.getRow(cb.startNumRow()), 100))
+
+                        //p99/p100
+                        .f303Repayments(getRepayments(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
+                        //p94/p97/p98/p101/102/103/104/105
+                        .f303RepaymentSources(getRepaymentSource(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
+
+                        .p104(getStringValue(sheet.getRow(cb.startNumRow()), 103))
+                        .p105(getStringValue(sheet.getRow(cb.startNumRow()), 104))
 
                         // P10
                         .p10(getP10(cb.startNumRow(), cb.getNumRowEndContract(), sheet))
+                        .tranches(cb.tranches()
+                                .stream()
+                                .map(t -> getTranches(t, sheet))
+                                .collect(Collectors.toList()))
                 )
                 .collect(Collectors.toList())
         );
 
         return f303;
+    }
+
+    private F303Tranche getTranches(ContractBoard tranche, Sheet sheet) {
+        return new F303Tranche()
+                // p2
+                .p22(getBigIntegerValue(sheet.getRow(tranche.startNumRow()), 21))
+                .p25(getLocalDateValue(sheet.getRow(tranche.startNumRow()), 24))
+                .p33(getStringValue(sheet.getRow(tranche.startNumRow()), 32))
+                // p3
+                .p36(getStringValue(sheet.getRow(tranche.startNumRow()), 35))
+                .p37(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 36))
+                .p38(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 37))
+                .p39(getStringValue(sheet.getRow(tranche.startNumRow()), 38))
+                .p40(getStringValue(sheet.getRow(tranche.startNumRow()), 39))
+                .p41(getLocalDateValue(sheet.getRow(tranche.startNumRow()), 40))
+                .p42(getLocalDateValue(sheet.getRow(tranche.startNumRow()), 41))
+                .p43(getStringValue(sheet.getRow(tranche.startNumRow()), 42))
+                .p44(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 43))
+                .p45(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 44))
+                .p46(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 45))
+                .p47(getBigIntegerValue(sheet.getRow(tranche.startNumRow()), 46))
+                .p48(getStringValue(sheet.getRow(tranche.startNumRow()), 47))
+                .p49(getStringValue(sheet.getRow(tranche.startNumRow()), 48))
+
+                // 49/50/51
+                .conditionsCodes(getConditionsCodes(tranche.startNumRow(), tranche.getNumRowEndContract(), sheet))
+
+                .p52(getStringValue(sheet.getRow(tranche.startNumRow()), 51))
+                .p53(getStringValue(sheet.getRow(tranche.startNumRow()), 52))
+                .p54(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 53))
+                .p55(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 54))
+
+                // p4
+                .warranties(getWarranties(tranche.startNumRow(), tranche.getNumRowEndContract(), sheet))
+
+                // p5
+                .p62(getLocalDateValue(sheet.getRow(tranche.startNumRow()), 61))
+                .p63(getStringValue(sheet.getRow(tranche.startNumRow()), 62))
+                .p64(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 63))
+                .p65(getStringValue(sheet.getRow(tranche.startNumRow()), 64))
+                .p66(getStringValue(sheet.getRow(tranche.startNumRow()), 65))
+                .p67(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 66))
+                .p68(getStringValue(sheet.getRow(tranche.startNumRow()), 67))
+                .p69(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 68))
+                .p70(getStringValue(sheet.getRow(tranche.startNumRow()), 69))
+
+                // p6
+                .p71(getStringValue(sheet.getRow(tranche.startNumRow()), 70))
+                .p72(getStringValue(sheet.getRow(tranche.startNumRow()), 71))
+                .p73(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 72))
+                .p74(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 73))
+                .p75(getStringValue(sheet.getRow(tranche.startNumRow()), 74))
+                .p76(getStringValue(sheet.getRow(tranche.startNumRow()), 75))
+                .p77(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 76))
+                .p78(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 77))
+                .p79(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 78))
+                .p80(getStringValue(sheet.getRow(tranche.startNumRow()), 79))
+                .p81(getStringValue(sheet.getRow(tranche.startNumRow()), 80))
+                .p82(getStringValue(sheet.getRow(tranche.startNumRow()), 81))
+                .p83(getStringValue(sheet.getRow(tranche.startNumRow()), 82))
+                .p84(getStringValue(sheet.getRow(tranche.startNumRow()), 83))
+
+                // p7
+                .p85(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 84))
+                .p86(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 85))
+                .p87(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 86))
+
+                // p9
+                .p92(getStringValue(sheet.getRow(tranche.startNumRow()), 91))
+                .p93(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 92))
+                .p94(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 93))
+                .p95(getStringValue(sheet.getRow(tranche.startNumRow()), 94))
+                .p96(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 95))
+                .p97(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 96))
+                .p98(getBigDecimalValue(sheet.getRow(tranche.startNumRow()), 97))
+                .p99(getLocalDateValue(sheet.getRow(tranche.startNumRow()), 98))
+                .p101(getStringValue(sheet.getRow(tranche.startNumRow()), 100))
+
+                //p99/p100
+                .f303Repayments(getRepayments(tranche.startNumRow(), tranche.getNumRowEndContract(), sheet))
+
+                //p94/p97/p98/p101/102/103/104/105
+                .f303RepaymentSources(getRepaymentSource(tranche.startNumRow(), tranche.getNumRowEndContract(), sheet))
+
+                .p104(getStringValue(sheet.getRow(tranche.startNumRow()), 103))
+                .p105(getStringValue(sheet.getRow(tranche.startNumRow()), 104));
+    }
+
+    private List<F303RepaymentSource> getRepaymentSource(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
+        final List<Repayment> repayments = new ArrayList<>();
+        Row row;
+        for (int i = startNumRow + 1; i <= numRowEndContract; i++) {
+            row = sheet.getRow(i);
+
+            repayments.add(new Repayment()
+                    .p94(getBigDecimalValue(row, 93))
+                    .p97(getBigDecimalValue(row, 96))
+                    .p98(getBigDecimalValue(row, 97))
+                    .p101(getStringValue(row, 100))
+                    .p102(getStringValue(row, 101))
+                    .p103(getStringValue(row, 102))
+                    .p104(getStringValue(row, 103))
+                    .p105(getStringValue(row, 104))
+                    .p99(getLocalDateValue(row, 98))
+                    .p100(getLocalDateValue(row, 99))
+            );
+        }
+        return repayments
+                .stream()
+                .filter(r -> r.p99() == null && r.p100() == null && r.p101() != null && !r.p101().isEmpty())
+                .map(r -> new F303RepaymentSource()
+                        .p94(r.p94())
+                        .p97(r.p97())
+                        .p98(r.p98())
+                        .p101(r.p101())
+                        .p102(r.p102())
+                        .p103(r.p103())
+                        .p104(r.p104())
+                        .p105(r.p105())
+                )
+                .collect(Collectors.toList());
+    }
+
+
+    private List<F303Repayment> getRepayments(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
+        final List<Repayment> repayments = new ArrayList<>();
+        Row row;
+        for (int i = startNumRow + 1; i <= numRowEndContract; i++) {
+            row = sheet.getRow(i);
+
+            repayments.add(new Repayment()
+                    .p101(getStringValue(row, 100))
+                    .p99(getLocalDateValue(row, 98))
+                    .p100(getLocalDateValue(row, 99))
+            );
+        }
+        return repayments
+                .stream()
+                .filter(r -> (r.p99() != null || r.p100() != null) && (r.p101() == null && r.p101().isEmpty()))
+                .map(r -> new F303Repayment()
+                        .p99(r.p99())
+                        .p100(r.p100())
+                )
+                .collect(Collectors.toList());
     }
 
     private List<F303p10> getP10(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
@@ -195,54 +364,50 @@ public class ConverterXml {
     }
 
     private List<F303SpecialCondition> getConditionsCodes(Integer startNumRow, Integer numRowEndContract, Sheet sheet) {
-        final List<ConditionBoard> conditionBoards = new ArrayList<>();
+        final List<Condition> conditions = new ArrayList<>();
 
-        Row row;
-        String conditionName = null;
-        for (int i = startNumRow; i <= numRowEndContract; i++) {
-            row = sheet.getRow(i);
+        Row row = sheet.getRow(startNumRow);
+        Integer start = startNumRow;
 
-            if (row.getCell(48) != null && getStringValue(row, 48) != null) {
-                conditionName = getStringValue(row, 48);
+        if (row.getCell(48) != null
+                && getStringValue(row, 48) != null) {
+
+            if (Objects.requireNonNull(getStringValue(row, 48)).split(",").length > 1) {
+                start++;
             }
 
-            if (conditionName != null && !conditionName.isEmpty()) {
-                conditionBoards.add(new ConditionBoard()
-                        .rowIndex(i)
-                        .condition(conditionName)
-                );
-            }
+        } else {
+            return Collections.emptyList();
         }
 
-        return conditionBoards.stream()
-                .collect(Collectors.groupingBy(ConditionBoard::condition))
-                .entrySet()
-                .stream()
-                .map(entry -> new F303SpecialCondition()
-                        .p49(entry.getKey())
-                        .conditionsCodeConds(getConditionsCodeConds(entry.getValue().stream().mapToInt(ConditionBoard::rowIndex).min().getAsInt()
-                                , entry.getValue().stream().mapToInt(ConditionBoard::rowIndex).max().getAsInt()
-                                , sheet))
-                )
-                .collect(Collectors.toList());
-    }
-
-    private List<F303SpecialConditionProperty> getConditionsCodeConds(Integer startNumRow, Integer endNumRow, Sheet sheet) {
-        final List<F303SpecialConditionProperty> specialConditionProperties = new ArrayList<>();
-        Row row;
-        for (int i = startNumRow; i <= endNumRow; i++) {
+        for (int i = start; i <= numRowEndContract; i++) {
             row = sheet.getRow(i);
 
-            specialConditionProperties.add(new F303SpecialConditionProperty()
+            conditions.add(new Condition()
+                    .p49(getStringValue(row, 48))
                     .p50(getStringValue(row, 49))
                     .p51(getStringValue(row, 50))
             );
         }
 
-        return specialConditionProperties
+        return conditions
                 .stream()
-                .filter(r -> r.p50() != null
-                        || r.p51() != null
+                .filter(c -> c.p49() != null && !c.p49().isEmpty())
+                .collect(Collectors.groupingBy(Condition::p49))
+                .entrySet()
+                .stream()
+                .map(entry -> new F303SpecialCondition()
+                        .p49(entry.getKey())
+                        .conditionsCodeConds(
+                                entry.getValue()
+                                        .stream()
+                                        .filter(e -> (e.p50() != null && !e.p50().isEmpty()) || (e.p51() != null && !e.p51().isEmpty()))
+                                        .map(e -> new F303SpecialConditionProperty()
+                                                .p50(e.p50())
+                                                .p51(e.p51())
+                                        )
+                                        .collect(Collectors.toList())
+                        )
                 )
                 .collect(Collectors.toList());
     }

@@ -13,8 +13,6 @@ import java.time.LocalDate;
 @ToString
 @Accessors(fluent = true)
 public class F303Repayment {
-    //@XmlAttribute(name = "\u04209_8", required = true)
     private LocalDate p99;
-    //@XmlAttribute(name = "\u04209_9", required = true)
     private LocalDate p100;
 }

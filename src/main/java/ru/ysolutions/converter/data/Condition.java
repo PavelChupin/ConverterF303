@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 @Data
 @ToString
 @Accessors(fluent = true)
-public class ConditionBoard {
-    private Integer rowIndex;
-    private String condition;
+public class Condition {
+    private String p49;
+    private String p50;
+    private String p51;
 }

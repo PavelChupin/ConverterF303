@@ -36,4 +36,12 @@ public class ContractBoard {
         }
         this.tranches.add(contractBoard);
     }
+
+    public List<ContractBoard> tranches() {
+        if (CollectionUtils.isEmpty(tranches)){
+            this.tranches = new ArrayList<>();
+        }
+
+        return tranches;
+    }
 }
