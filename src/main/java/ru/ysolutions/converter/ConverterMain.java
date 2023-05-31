@@ -6,7 +6,6 @@ import ru.ysolutions.converter.exception.CheckInputParamsException;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.stream.XMLStreamException;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.file.Path;
 import java.util.Arrays;
 import java.util.List;
@@ -16,7 +15,6 @@ public class ConverterMain {
 
     public static void main(String[] args) {
         try {
-
             final List<String> params = Arrays.asList(args.clone());
             checkInputParams(params);
             new Converter(Path.of(params.get(0)), Path.of(params.get(1))).convert();
@@ -35,8 +33,16 @@ public class ConverterMain {
             } else if (params.size() > 2) {
                 throw new CheckInputParamsException("Ошибка. Переданно не поддерживаемое количество параметров. Поддерживается два.");
             }
-            final String fileFromEnd = params.get(0).split("\\.")[1].replace("xlsx", "xls");
-            final String fileToEnd = params.get(1).split("\\.")[1].replace("xlsx", "xls");
+            final String fileFromEnd = params
+                    .get(0)
+                    .split("\\.")[1]
+                    .replace("xlsx", "xls");
+
+            final String fileToEnd = params
+                    .get(1)
+                    .split("\\.")[1]
+                    .replace("xlsx", "xls");
+
             if (!fileEnds.contains(fileFromEnd)) {
                 throw new CheckInputParamsException(String.format("Ошибка. В параметре файл конвертации указан не поддерживаемый формат файла. %s.", fileFromEnd));
             } else if (!fileEnds.contains(fileToEnd)) {

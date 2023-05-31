@@ -2,6 +2,7 @@ package ru.ysolutions.converter;
 
 import jakarta.xml.bind.JAXBException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.util.IOUtils;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import ru.ysolutions.converter.exception.ConvertException;
 import ru.ysolutions.converter.helper.ParserHelper;
@@ -26,9 +27,17 @@ public class Converter {
         this.fileTo = fileTo;
     }
 
-    public void convert() throws JAXBException, IOException, DatatypeConfigurationException,XMLStreamException {
-        final String fileFromEnd = fileFrom.toString().split("\\.")[1].replace("xlsx", "xls");
-        final String fileToEnd = fileTo.toString().split("\\.")[1].replace("xlsx", "xls");
+    public void convert() throws JAXBException, IOException, DatatypeConfigurationException, XMLStreamException {
+        final String fileFromEnd = fileFrom
+                .toString()
+                .split("\\.")[1]
+                .replace("xlsx", "xls");
+
+        final String fileToEnd = fileTo
+                .toString()
+                .split("\\.")[1]
+                .replace("xlsx", "xls");
+
         if (fileFromEnd.equals("xls") && fileToEnd.equals("xml")) {
             convertXlsToXml();
         } else if (fileFromEnd.equals("xml") && fileToEnd.equals("xls")) {
@@ -46,8 +55,11 @@ public class Converter {
         book.close();
     }
 
-    private void convertXlsToXml() throws IOException, JAXBException,XMLStreamException {
+    private void convertXlsToXml() throws IOException, JAXBException {
+        IOUtils.setByteArrayMaxOverride(Integer.MAX_VALUE);
         try (Workbook workbook = new XSSFWorkbook(new FileInputStream(fileFrom.toFile()))) {
+            System.out.printf("The file %s exel load is completed.", fileFrom);
+            System.out.println();
             final F303 f303Xls = new ConverterXml(workbook).getDataFromXls();
             final Ф0409303 f303Xml = FactoryF303Xml.getDataXmlByF303(f303Xls);
             ParserHelper.saveObjectToXMLFile(fileTo, f303Xml);

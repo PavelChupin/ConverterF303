@@ -12,8 +12,7 @@ import java.time.LocalDate;
 @Data
 @ToString
 @Accessors(fluent = true)
-public class Repayment
-{
+public class Repayment {
     private BigDecimal p94;
     private BigDecimal p97;
     private BigDecimal p98;

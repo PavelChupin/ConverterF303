@@ -19,7 +19,7 @@ public class F303 {
     private List<F303Contract> contracts;
 
     public List<F303Contract> getContracts() {
-        if (CollectionUtils.isEmpty(contracts)){
+        if (CollectionUtils.isEmpty(contracts)) {
             this.contracts = new ArrayList<>();
         }
         return contracts;

@@ -1,13 +1,11 @@
 package ru.ysolutions.converter.models.xls.f303;
 
-import jakarta.xml.bind.annotation.XmlAttribute;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @NoArgsConstructor
 @Data

@@ -10,8 +10,6 @@ import lombok.experimental.Accessors;
 @ToString
 @Accessors(fluent = true)
 public class F303RepaymentSourceContract {
-    //@XmlAttribute(name = "\u04209_11")
     private String p102;
-    //@XmlAttribute(name = "\u04209_12")
     private String p103;
 }

@@ -30,15 +30,15 @@ public class ContractBoard {
         return this.endNumRow;
     }
 
-    public void addTranche(ContractBoard contractBoard){
-        if (CollectionUtils.isEmpty(tranches)){
+    public void addTranche(ContractBoard contractBoard) {
+        if (CollectionUtils.isEmpty(tranches)) {
             this.tranches = new ArrayList<>();
         }
         this.tranches.add(contractBoard);
     }
 
     public List<ContractBoard> tranches() {
-        if (CollectionUtils.isEmpty(tranches)){
+        if (CollectionUtils.isEmpty(tranches)) {
             this.tranches = new ArrayList<>();
         }
 

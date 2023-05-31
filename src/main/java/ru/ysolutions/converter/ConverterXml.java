@@ -497,16 +497,15 @@ public class ConverterXml {
         final List<ContractBoard> contractBoards = new ArrayList<>();
 
         int lastRow = sheet.getLastRowNum();
+        System.out.printf("Max row count on sheet: %d.", lastRow);
         int startContractRow = 5;
 
-        ContractBoard contractBoard = new ContractBoard().startNumRow(startContractRow);
-        String clientName = sheet.getRow(startContractRow).getCell(0).getStringCellValue();
+        ContractBoard contractBoard = null;//new ContractBoard().startNumRow(startContractRow);
 
         ContractBoard trancheBoard = null;
         String trancheNumberNow = null;
-//        Integer startRowNumTranche = null;
-//        Integer endRowNumTranche = null;
         Row row;
+
         for (int i = startContractRow; i <= lastRow; i++) {
             row = sheet.getRow(i);
 
@@ -528,17 +527,25 @@ public class ConverterXml {
             // Если текущая строка это начало новой группы строк, то считаем что предыдущий контракт закончили и начали новый.
             // Учет ведем по клиентам
             if (row.getCell(0) != null
-                    && !row.getCell(0).getStringCellValue().isEmpty()
-                    && !clientName.equals(row.getCell(0).getStringCellValue())) {
-                contractBoard.endNumRow(i - 1);
+                    && !row.getCell(0).getStringCellValue().isEmpty()) {
+                if (contractBoard == null) {
+                    contractBoard = new ContractBoard().startNumRow(i);
+                } else {
+                    contractBoard.endNumRow(i - 1);
+                    contractBoard = new ContractBoard().startNumRow(i);
+                }
+
+                //contractBoard.endNumRow(i - 1);
                 if (trancheBoard != null) {
                     contractBoard.addTranche(trancheBoard.endNumRow(i - 1));
                     trancheBoard = null;
                     trancheNumberNow = null;
                 }
+
                 contractBoards.add(contractBoard);
-                contractBoard = new ContractBoard().startNumRow(i);
+                //contractBoard = new ContractBoard().startNumRow(i);
             }
+
             if (i == lastRow) {
                 if (trancheBoard != null) {
                     contractBoard.addTranche(trancheBoard.endNumRow(i));
@@ -546,7 +553,7 @@ public class ConverterXml {
                     trancheNumberNow = null;
                 }
                 contractBoard.endNumRow(i);
-                contractBoards.add(contractBoard);
+                //contractBoards.add(contractBoard);
             }
         }
         return contractBoards;

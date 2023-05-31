@@ -425,7 +425,7 @@ public class ConverterExcel {
     private int saveRepaymentSources(int startContractRow, int startRow, Sheet sheet, List<F303RepaymentSource> f303RepaymentSources) {
         int number = startRow;
         for (F303RepaymentSource f303RepaymentSource : f303RepaymentSources) {
-            Row rowNumber = null;
+            Row rowNumber;
 
             if (f303RepaymentSources.size() == 1
                     && f303RepaymentSource.p94() == null
@@ -703,7 +703,7 @@ public class ConverterExcel {
     private int saveWarranty(int startContractRow, int startRow, Sheet sheet, List<F303Warranty> warranties) {
         int number = startRow;
         for (F303Warranty warranty : warranties) {
-            Row rowNumber = null;
+            Row rowNumber;
             if ("0".equals(warranty.p56())) {
                 rowNumber = sheet.getRow(startContractRow);
             } else {
@@ -731,16 +731,16 @@ public class ConverterExcel {
     }
 
     // Поля 49 50 51
-    private int saveConditionsCode(int rowEndWar, int startRow, Sheet sheet, List<F303SpecialCondition> f303SpecialConditions) {
-        int number = rowEndWar;
+    private int saveConditionsCode(int startRow, int startContractRow, Sheet sheet, List<F303SpecialCondition> f303SpecialConditions) {
+        int number = startRow;
         for (F303SpecialCondition f303SpecialCondition : f303SpecialConditions) {
-            Row rowNumber = null;
+            Row rowNumber;
             if (f303SpecialConditions.size() == 1
                     && (CollectionUtils.isEmpty(f303SpecialCondition.conditionsCodeConds())
                     || "ЛД".equalsIgnoreCase(f303SpecialConditions.get(0).p49())
                     || "ЛЗ".equalsIgnoreCase(f303SpecialConditions.get(0).p49()))
             ) {
-                rowNumber = sheet.getRow(startRow);
+                rowNumber = sheet.getRow(startContractRow);
 
                 if ("ЛД".equalsIgnoreCase(f303SpecialConditions.get(0).p49())
                         || "ЛЗ".equalsIgnoreCase(f303SpecialConditions.get(0).p49())) {
@@ -750,11 +750,11 @@ public class ConverterExcel {
                     saveValueToCellString(rowNumber, 50, f303SpecialConditions.get(0).conditionsCodeConds().get(0).p51(), this.stringStyle);
 
                     f303SpecialConditions.get(0).conditionsCodeConds().remove(0);
-                    if (number <= rowEndWar) {
+                    if (number <= startRow) {
                         if (CollectionUtils.isNotEmpty(f303SpecialConditions.get(0).conditionsCodeConds())) {
-                            number = rowEndWar + 1;
+                            number = startRow + 1;
                         } else {
-                            number = rowEndWar;
+                            number = startRow;
                         }
                     }
                 }

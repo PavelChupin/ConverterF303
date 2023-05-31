@@ -278,13 +278,15 @@ public class FactoryF303 {
                 .collect(Collectors.toList());
     }
 
-    private static String getP49TrancheByParam(List<Ф0409303Данные303ДоговорТраншУслТ> услТ) {
-        if (CollectionUtils.isEmpty(услТ)) {
+    private static String getP49TrancheByParam(List<Ф0409303Данные303ДоговорТраншУслТ> cond) {
+        if (CollectionUtils.isEmpty(cond)) {
             return null;
         } else {
-            return Arrays.toString(услТ.stream()
+            return Arrays.toString(cond.stream()
                     .map(Ф0409303Данные303ДоговорТраншУслТ::getР315)
-                    .toArray()).replace("[", "").replace("]", "");
+                    .toArray())
+                    .replace("[", "")
+                    .replace("]", "");
         }
     }
 
@@ -294,7 +296,9 @@ public class FactoryF303 {
         } else {
             return Arrays.toString(ist.stream()
                     .map(Ф0409303Данные303ДоговорТраншИстТ::getР910)
-                    .toArray()).replace("[", "").replace("]", "");
+                    .toArray())
+                    .replace("[", "")
+                    .replace("]", "");
         }
     }
 

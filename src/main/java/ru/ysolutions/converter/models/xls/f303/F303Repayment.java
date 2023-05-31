@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import javax.xml.datatype.XMLGregorianCalendar;
 import java.time.LocalDate;
 
 @NoArgsConstructor
