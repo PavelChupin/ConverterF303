@@ -293,7 +293,7 @@ public class ConverterXml {
         }
         return repayments
                 .stream()
-                .filter(r -> (r.p99() != null || r.p100() != null) && (r.p101() == null && r.p101().isEmpty()))
+                .filter(r -> (r.p99() != null || r.p100() != null) && (r.p101() == null || r.p101().isEmpty()))
                 .map(r -> new F303Repayment()
                         .p99(r.p99())
                         .p100(r.p100())
