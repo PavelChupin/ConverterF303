@@ -36,5 +36,6 @@ build/
 *.log
 *.gz
 0409303_old.xml
-!**/src/main/java/META-INF/JAXB/*
-/Пример.xlsx
+*.xjb
+*.xlsx
+*.xls
