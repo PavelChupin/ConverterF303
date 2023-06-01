@@ -506,7 +506,7 @@ public class ConverterXml {
         String trancheNumberNow = null;
         Row row;
 
-        for (int i = startContractRow; i <= lastRow; i++) {
+        for (int i = startContractRow; sheet.getRow(i) != null && i <= lastRow; i++) {
             row = sheet.getRow(i);
 
             // Если в поле номер транша есть запись, значит начали новый транш.
@@ -546,7 +546,8 @@ public class ConverterXml {
                 //contractBoard = new ContractBoard().startNumRow(i);
             }
 
-            if (i == lastRow) {
+            // Если закончили обход всех строк
+            if (i == lastRow || sheet.getRow(i + 1) == null) {
                 if (trancheBoard != null) {
                     contractBoard.addTranche(trancheBoard.endNumRow(i));
                     trancheBoard = null;
