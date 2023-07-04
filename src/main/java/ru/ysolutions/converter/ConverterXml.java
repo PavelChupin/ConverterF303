@@ -1,5 +1,6 @@
 package ru.ysolutions.converter;
 
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -11,6 +12,7 @@ import ru.ysolutions.converter.models.xls.f303.*;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -477,20 +479,91 @@ public class ConverterXml {
                 .collect(Collectors.toList());
     }
 
-    private String getStringValue(Row row, Integer cell) {
-        return row.getCell(cell) == null || row.getCell(cell).getStringCellValue().isEmpty() ? null : row.getCell(cell).getStringCellValue();
+    private String getStringValue(Row row, Integer cellIndex) {
+        try {
+            if (row.getCell(cellIndex) != null
+                    //&& row.getCell(cellIndex).getNumericCellValue() != null
+                    && CellType.NUMERIC.equals(row.getCell(cellIndex).getCellType())
+            ) {
+                return BigDecimal.valueOf(row.getCell(cellIndex).getNumericCellValue()).toBigInteger().toString();
+            } else if (row.getCell(cellIndex) != null
+                    && CellType.STRING.equals(row.getCell(cellIndex).getCellType())
+                    && row.getCell(cellIndex).getStringCellValue() != null
+            ) {
+                return row.getCell(cellIndex).getStringCellValue();
+            } else {
+                return null;
+            }
+        } catch (IllegalStateException | NumberFormatException e) {
+            printErrorToConsole(row, cellIndex);
+            throw e;
+        }
     }
 
     private LocalDate getLocalDateValue(Row row, Integer cellIndex) {
-        return row.getCell(cellIndex) == null || row.getCell(cellIndex).getLocalDateTimeCellValue() == null ? null : row.getCell(cellIndex).getLocalDateTimeCellValue().toLocalDate();
+        try {
+            if (row.getCell(cellIndex) != null
+                    && CellType.STRING.equals(row.getCell(cellIndex).getCellType())
+                    && row.getCell(cellIndex).getStringCellValue() != null) {
+                return LocalDate.parse(row.getCell(cellIndex).getStringCellValue(), DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+            } else if (row.getCell(cellIndex) != null
+                    && row.getCell(cellIndex).getLocalDateTimeCellValue() != null) {
+                return row.getCell(cellIndex).getLocalDateTimeCellValue().toLocalDate();
+            } else {
+                return null;
+            }
+        } catch (IllegalStateException | NumberFormatException e) {
+            printErrorToConsole(row, cellIndex);
+            throw e;
+        }
     }
 
     private BigDecimal getBigDecimalValue(Row row, Integer cellIndex) {
-        return row.getCell(cellIndex) == null ? null : BigDecimal.valueOf(row.getCell(cellIndex).getNumericCellValue());
+        try {
+            if (row.getCell(cellIndex) != null
+                    //&& row.getCell(cellIndex).getNumericCellValue() != null
+                    && CellType.NUMERIC.equals(row.getCell(cellIndex).getCellType())
+            ) {
+                return BigDecimal.valueOf(row.getCell(cellIndex).getNumericCellValue());
+            } else if (row.getCell(cellIndex) != null
+                    && CellType.STRING.equals(row.getCell(cellIndex).getCellType())
+                    && row.getCell(cellIndex).getStringCellValue() != null
+            ) {
+                return BigDecimal.valueOf(Long.parseLong(row.getCell(cellIndex).getStringCellValue()));
+            } else {
+                return null;
+            }
+        } catch (IllegalStateException | NumberFormatException e) {
+            printErrorToConsole(row, cellIndex);
+            throw e;
+        }
     }
 
     private BigInteger getBigIntegerValue(Row row, Integer cellIndex) {
-        return row.getCell(cellIndex) == null ? null : BigInteger.valueOf(Long.parseLong(row.getCell(cellIndex).getStringCellValue()));
+        try {
+            if (row.getCell(cellIndex) != null
+                    && CellType.NUMERIC.equals(row.getCell(cellIndex).getCellType())
+                    //&& row.getCell(cellIndex).getNumericCellValue() != null
+            ) {
+                return BigDecimal.valueOf(row.getCell(cellIndex).getNumericCellValue()).toBigInteger();
+            } else if (row.getCell(cellIndex) != null
+                    && CellType.STRING.equals(row.getCell(cellIndex).getCellType())
+                    && row.getCell(cellIndex).getStringCellValue() != null
+            ) {
+                return BigInteger.valueOf(Long.parseLong(row.getCell(cellIndex).getStringCellValue()));
+            } else {
+                return null;
+            }
+        } catch (IllegalStateException | NumberFormatException e) {
+            printErrorToConsole(row, cellIndex);
+            throw e;
+        }
+    }
+
+    private void printErrorToConsole(Row row, Integer cellIndex) {
+        System.out.println("CellType: " + (row.getCell(cellIndex) != null ? row.getCell(cellIndex).getCellType() : ""));
+        System.out.println("RowNumber: " + (row.getRowNum() + 1) + ", CellNumber: " + (cellIndex + 1) + ".");
+        System.out.println("Value: " + row.getCell(cellIndex).getStringCellValue() + ".");
     }
 
     private List<ContractBoard> getBoardContract(Sheet sheet) {
@@ -498,6 +571,7 @@ public class ConverterXml {
 
         int lastRow = sheet.getLastRowNum();
         System.out.printf("Max row count on sheet: %d.", lastRow);
+        System.out.println();
         int startContractRow = 5;
 
         ContractBoard contractBoard = null;//new ContractBoard().startNumRow(startContractRow);
